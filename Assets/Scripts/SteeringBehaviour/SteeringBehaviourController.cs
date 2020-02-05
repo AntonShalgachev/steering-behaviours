@@ -11,6 +11,8 @@ namespace UnityPrototype
         [SerializeField] private float m_maxSpeed = 10.0f;
         [SerializeField] private float m_maxForce = 10.0f;
 
+        [SerializeField] private float m_speedControlRate = 1.0f;
+
         public float maxSpeed => m_maxSpeed;
         public float maxForce => m_maxForce;
 
@@ -43,7 +45,11 @@ namespace UnityPrototype
 
         private void FixedUpdate()
         {
-            var totalForce = Vector2.zero;
+            var breakingForce = Vector2.zero;
+            if (speed > maxSpeed)
+                breakingForce += velocity.normalized * (maxSpeed - speed) * m_speedControlRate;
+
+            var steeringForce = Vector2.zero;
             foreach (var behaviour in m_behaviours)
             {
                 var forceResult = behaviour.CalculateForce();
@@ -51,10 +57,12 @@ namespace UnityPrototype
                     continue;
 
                 var force = forceResult.Value;
-                totalForce += force;
+                steeringForce += force;
             }
 
-            body.AddForce(totalForce);
+            steeringForce = Vector2.ClampMagnitude(steeringForce, maxForce);
+
+            body.AddForce(steeringForce + breakingForce);
         }
     }
 }
