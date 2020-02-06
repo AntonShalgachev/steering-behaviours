@@ -30,6 +30,8 @@ namespace UnityPrototype
         protected Vector2 m_velocity => m_controller.velocity;
         protected float m_maxSpeed => m_controller.maxSpeed * m_maxSpeedMultiplier;
         protected float m_maxForce => m_controller.maxForce * m_maxForceMultiplier;
+        protected Vector2 m_forward => m_controller.forward;
+        protected Vector2 m_right => m_controller.right;
 
         private void OnEnable()
         {

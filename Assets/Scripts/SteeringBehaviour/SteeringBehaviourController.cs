@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gamelogic.Extensions;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -32,6 +33,8 @@ namespace UnityPrototype
         [ShowNativeProperty] public Vector2 position => transform.position;
         [ShowNativeProperty] public Vector2 velocity => body.velocity;
         [ShowNativeProperty] public float speed => velocity.magnitude;
+        [ShowNativeProperty] public Vector2 forward => velocity.magnitude > Mathf.Epsilon ? velocity.normalized : Vector2.up;
+        [ShowNativeProperty] public Vector2 right => forward.Rotate(-90);
 
         public void AddBehaviour(ISteeringBehaviour behaviour)
         {
