@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace UnityPrototype
@@ -28,10 +29,14 @@ namespace UnityPrototype
 
         protected Vector2 m_position => m_controller.position;
         protected Vector2 m_velocity => m_controller.velocity;
-        protected float m_maxSpeed => m_controller.maxSpeed * m_maxSpeedMultiplier;
-        protected float m_maxForce => m_controller.maxForce * m_maxForceMultiplier;
+        [ShowNativeProperty] protected float m_maxSpeed => m_controller.maxSpeed * m_maxSpeedMultiplier;
+        [ShowNativeProperty] protected float m_maxSteeringForce => m_controller.maxSteeringForce * m_maxForceMultiplier;
+        [ShowNativeProperty] protected float m_maxAccelerationForce => m_controller.maxAccelerationForce * m_maxForceMultiplier;
+        [ShowNativeProperty] protected float m_maxBrakingForce => m_controller.maxBrakingForce * m_maxForceMultiplier;
         protected Vector2 m_forward => m_controller.forward;
         protected Vector2 m_right => m_controller.right;
+
+        [ShowNonSerializedField] private float m_lastAppliedForce = 0.0f;
 
         private void OnEnable()
         {
@@ -43,6 +48,15 @@ namespace UnityPrototype
             m_controller.RemoveBehaviour(this);
         }
 
-        public abstract Vector2? CalculateForce();
+        public Vector2? CalculateForce()
+        {
+            var force = CalculateForceInternal();
+
+            m_lastAppliedForce = force.GetValueOrDefault(Vector2.zero).magnitude;
+
+            return force;
+        }
+
+        protected abstract Vector2? CalculateForceInternal();
     }
 }
