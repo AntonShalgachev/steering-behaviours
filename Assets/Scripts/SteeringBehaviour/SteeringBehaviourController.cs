@@ -10,10 +10,13 @@ namespace UnityPrototype
     public class SteeringBehaviourController : MonoBehaviour
     {
         [SerializeField] private float m_maxSpeed = 10.0f;
+
+        [Header("Forces")]
         [SerializeField] private float m_maxSteeringForce = 10.0f;
         [SerializeField] private float m_maxAccelerationForce = 10.0f;
         [SerializeField] private float m_maxBrakingForce = 10.0f;
 
+        [Header("Speed control")]
         [SerializeField] private float m_speedControlRate = 1.0f;
 
         public float maxSpeed => m_maxSpeed;
@@ -40,7 +43,8 @@ namespace UnityPrototype
         public Vector2 forward => velocity.magnitude > Mathf.Epsilon ? velocity.normalized : Vector2.up;
         public Vector2 right => forward.Rotate(-90);
 
-        [ShowNonSerializedField] private float m_lastAppliedForce = 0.0f;
+        [ShowNonSerializedField] private Vector2 m_lastAppliedForce = Vector2.zero;
+        [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
 
         public void AddBehaviour(ISteeringBehaviour behaviour)
         {
@@ -58,21 +62,41 @@ namespace UnityPrototype
             if (speed > maxSpeed)
                 brakingForce += velocity.normalized * (maxSpeed - speed) * m_speedControlRate;
 
-            var steeringForce = Vector2.zero;
+            var steeringForceComponents = Vector2.zero;
             foreach (var behaviour in m_behaviours)
             {
-                var forceResult = behaviour.CalculateForce();
-                if (forceResult == null)
+                var forceComponentsResult = behaviour.CalculateForceComponents();
+                if (forceComponentsResult == null)
                     continue;
 
-                var force = forceResult.Value;
-                steeringForce += force;
+                var forceComponents = forceComponentsResult.Value;
+                steeringForceComponents += forceComponents;
             }
 
-            var totalForce = steeringForce + brakingForce;
-            m_lastAppliedForce = totalForce.magnitude;
+            steeringForceComponents = ClampForceComponents(steeringForceComponents);
+            m_lastAppliedForce = steeringForceComponents;
+            var totalForce = CalculateForceFromComponents(steeringForceComponents) + brakingForce;
 
             body.AddForce(totalForce);
+        }
+
+        private Vector2 ClampForceComponents(Vector2 steeringForceComponents)
+        {
+            var maxTangentForce = steeringForceComponents.y > 0.0f ? maxAccelerationForce : maxBrakingForce;
+            var maxNormalForce = maxSteeringForce;
+
+            steeringForceComponents.x = Mathf.Min(steeringForceComponents.x, maxNormalForce);
+            steeringForceComponents.y = Mathf.Min(steeringForceComponents.y, maxTangentForce);
+
+            return steeringForceComponents;
+        }
+
+        private Vector2 CalculateForceFromComponents(Vector2 steeringForceComponents)
+        {
+            var normalForce = steeringForceComponents.x;
+            var tangentForce = steeringForceComponents.y;
+
+            return tangentForce * forward + normalForce * right;
         }
     }
 }

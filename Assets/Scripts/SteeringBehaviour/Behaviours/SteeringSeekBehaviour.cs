@@ -8,7 +8,7 @@ namespace UnityPrototype
     {
         [SerializeField] private Transform m_target = null;
 
-        protected override Vector2? CalculateForceInternal()
+        protected override Vector2? CalculateForceComponentsInternal()
         {
             if (m_target == null)
                 return null;
@@ -29,15 +29,17 @@ namespace UnityPrototype
 
             var deltaSpeed = targetSpeed - speed;
             var deltaAngle = Mathf.DeltaAngle(targetAngle, angle);
+
             var maxTangentForce = deltaSpeed > 0.0f ? m_maxAccelerationForce : m_maxBrakingForce;
 
             var tangentForce = Mathf.Sign(deltaSpeed) * maxTangentForce;
             var normalForce = Mathf.Sign(deltaAngle) * m_maxSteeringForce;
 
-            // var force = (targetVelocity - m_velocity).normalized * m_maxForce;
-            var force = tangentForce * m_forward + normalForce * m_right;
+            return new Vector2(normalForce, tangentForce);
 
-            return force;
+            // var force = tangentForce * m_forward + normalForce * m_right;
+
+            // return force;
         }
     }
 }

@@ -48,15 +48,15 @@ namespace UnityPrototype
             m_controller.RemoveBehaviour(this);
         }
 
-        public Vector2? CalculateForce()
+        public Vector2? CalculateForceComponents()
         {
-            var force = CalculateForceInternal();
+            var force = CalculateForceComponentsInternal();
 
             m_lastAppliedForce = force.GetValueOrDefault(Vector2.zero).magnitude;
 
             return force;
         }
 
-        protected abstract Vector2? CalculateForceInternal();
+        protected abstract Vector2? CalculateForceComponentsInternal();
     }
 }
