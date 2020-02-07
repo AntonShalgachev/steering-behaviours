@@ -31,9 +31,9 @@ namespace Gamelogic.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="prefab">The object.</param>
         /// <returns>T.</returns>
-        public static T Instantiate<T>(T prefab) where T : Component
+        public new static T Instantiate<T>(T prefab) where T : Component
         {
-            return (T) Object.Instantiate(prefab);
+            return (T)Object.Instantiate(prefab);
         }
 #endif
 
@@ -260,7 +260,7 @@ namespace Gamelogic.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static T Clone<T>(this T obj) where T: MonoBehaviour
+        public static T Clone<T>(this T obj) where T : MonoBehaviour
         {
             return GLMonoBehaviour.Instantiate<T>(obj);
         }
