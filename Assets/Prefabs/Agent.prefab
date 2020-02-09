@@ -174,6 +174,7 @@ GameObject:
   - component: {fileID: 1530774259299284807}
   - component: {fileID: 4434952303858725611}
   - component: {fileID: 1135234038731458047}
+  - component: {fileID: 4293356774402109724}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -247,11 +248,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6e6663c661679e469fa154b1aa049bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxSpeedMultiplier: 0.5
-  m_maxForceMultiplier: 0.5
-  m_velocityAngleAttenuation: 15
-  m_velocityMagnitudeAttenuation: 3
+  m_commonParameters:
+    maxSpeedMultiplier: 0.5
+    maxForceMultiplier: 0.5
+    velocityAngleAttenuation: 15
+    velocityMagnitudeAttenuation: 3
   m_target: {fileID: 0}
+--- !u!114 &4293356774402109724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5408048997544501985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1594a7a338d70446ad5db7ca3923aac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_commonParameters:
+    maxSpeedMultiplier: 0.5
+    maxForceMultiplier: 0.1
+    velocityAngleAttenuation: 15
+    velocityMagnitudeAttenuation: 3
+  m_threat: {fileID: 0}
 --- !u!1 &5408048997566168652
 GameObject:
   m_ObjectHideFlags: 0

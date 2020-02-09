@@ -8,8 +8,19 @@ namespace UnityPrototype
     [RequireComponent(typeof(SteeringBehaviourController))]
     public abstract class ISteeringBehaviour : MonoBehaviour
     {
-        [SerializeField] private float m_maxSpeedMultiplier = 0.5f;
-        [SerializeField] private float m_maxForceMultiplier = 0.5f;
+        [System.Serializable]
+        public class CommonBehaviourParameters
+        {
+            [Min(0.0f)] public float maxSpeedMultiplier = 1.0f;
+            [Min(0.0f)] public float maxForceMultiplier = 1.0f;
+
+            [Min(0.0f)] public float velocityAngleAttenuation = 15.0f;
+            [Min(0.0f)] public float velocityMagnitudeAttenuation = 3.0f;
+        }
+
+        [SerializeField] protected CommonBehaviourParameters m_commonParameters = new CommonBehaviourParameters();
+
+        public CommonBehaviourParameters commonParameters => m_commonParameters;
 
         private SteeringBehaviourController m_cachedController = null;
         private SteeringBehaviourController m_controller
@@ -27,20 +38,35 @@ namespace UnityPrototype
             }
         }
 
-        protected Vector2 m_position => m_controller.position;
-        protected Vector2 m_velocity => m_controller.velocity;
-        [ShowNativeProperty] protected float m_maxSpeed => m_controller.maxSpeed * m_maxSpeedMultiplier;
-        [ShowNativeProperty] protected float m_maxSteeringForce => m_controller.maxSteeringForce * m_maxForceMultiplier;
-        [ShowNativeProperty] protected float m_maxAccelerationForce => m_controller.maxAccelerationForce * m_maxForceMultiplier;
-        [ShowNativeProperty] protected float m_maxBrakingForce => m_controller.maxBrakingForce * m_maxForceMultiplier;
+        public Vector2 position => m_controller.position;
+        public Vector2 velocity => m_controller.velocity;
+        [ShowNativeProperty] public float maxSpeed => m_controller.maxSpeed * m_commonParameters.maxSpeedMultiplier;
+        [ShowNativeProperty] public float maxSteeringForce => m_controller.maxSteeringForce * m_commonParameters.maxForceMultiplier;
+        [ShowNativeProperty] public float maxAccelerationForce => m_controller.maxAccelerationForce * m_commonParameters.maxForceMultiplier;
+        [ShowNativeProperty] public float maxBrakingForce => m_controller.maxBrakingForce * m_commonParameters.maxForceMultiplier;
         protected Vector2 m_forward => m_controller.forward;
         protected Vector2 m_right => m_controller.right;
 
-        [ShowNonSerializedField] private float m_lastAppliedForce = 0.0f;
+        private Vector2 m_lastAppliedForce = Vector2.zero;
+        [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
+
+        private int m_behaviourIndex = -1;
+        private Color[] m_debugColors = new Color[]{
+            Color.red,
+            Color.green,
+            Color.blue,
+            Color.yellow,
+            Color.magenta,
+            Color.cyan,
+            Color.black,
+            Color.white,
+            Color.gray,
+        };
 
         private void OnEnable()
         {
-            m_controller.AddBehaviour(this);
+            m_behaviourIndex = m_controller.AddBehaviour(this);
+            Debug.Assert(m_behaviourIndex >= 0);
         }
 
         private void OnDisable()
@@ -52,11 +78,47 @@ namespace UnityPrototype
         {
             var force = CalculateForceComponentsInternal();
 
-            m_lastAppliedForce = force.GetValueOrDefault(Vector2.zero).magnitude;
+            m_lastAppliedForce = m_controller.CalculateForceFromComponents(force.GetValueOrDefault(Vector2.zero));
 
             return force;
         }
 
         protected abstract Vector2? CalculateForceComponentsInternal();
+
+        public Vector2 CalculateForceForVelocity(Vector2 targetVelocity)
+        {
+            var speed = velocity.magnitude;
+            var targetSpeed = targetVelocity.magnitude;
+
+            var angle = Vector2.SignedAngle(Vector2.up, velocity);
+            var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity);
+
+            var deltaSpeed = targetSpeed - speed;
+            var deltaAngle = Mathf.DeltaAngle(targetAngle, angle);
+
+            if (Mathf.Abs(targetSpeed) < Mathf.Epsilon)
+                deltaAngle = 0.0f;
+
+            deltaSpeed = Mathf.Clamp(deltaSpeed, -m_commonParameters.velocityMagnitudeAttenuation, m_commonParameters.velocityMagnitudeAttenuation) / m_commonParameters.velocityMagnitudeAttenuation;
+            deltaAngle = Mathf.Clamp(deltaAngle, -m_commonParameters.velocityAngleAttenuation, m_commonParameters.velocityAngleAttenuation) / m_commonParameters.velocityAngleAttenuation;
+
+            var maxTangentForce = deltaSpeed > 0.0f ? maxAccelerationForce : maxBrakingForce;
+
+            var tangentForce = deltaSpeed * maxTangentForce;
+            var normalForce = deltaAngle * maxSteeringForce;
+
+            return new Vector2(normalForce, tangentForce);
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (m_behaviourIndex < 0)
+                return;
+
+            var colorIndex = m_behaviourIndex % m_debugColors.Length;
+            Gizmos.color = m_debugColors[colorIndex];
+
+            Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_lastAppliedForce);
+        }
     }
 }

@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace UnityPrototype
 {
-    public class SteeringSeekBehaviour : ISteeringBehaviour
+    public class SteeringFleeBehaviour : ISteeringBehaviour
     {
-        [SerializeField] private Transform m_target = null;
+        [SerializeField] private Transform m_threat = null;
 
         protected override Vector2? CalculateForceComponentsInternal()
         {
-            if (m_target == null)
+            if (m_threat == null)
                 return null;
 
-            return SteeringBehaviourUtils.Seek(m_target.position, this);
+            return SteeringBehaviourUtils.Flee(m_threat.position, this);
         }
     }
 }

@@ -46,9 +46,13 @@ namespace UnityPrototype
         [ShowNonSerializedField] private Vector2 m_lastAppliedForce = Vector2.zero;
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
 
-        public void AddBehaviour(ISteeringBehaviour behaviour)
+        public int AddBehaviour(ISteeringBehaviour behaviour)
         {
+            Debug.Assert(!m_behaviours.Contains(behaviour));
+
+            var index = m_behaviours.Count;
             m_behaviours.Add(behaviour);
+            return index;
         }
 
         public void RemoveBehaviour(ISteeringBehaviour behaviour)
@@ -91,7 +95,7 @@ namespace UnityPrototype
             return steeringForceComponents;
         }
 
-        private Vector2 CalculateForceFromComponents(Vector2 steeringForceComponents)
+        public Vector2 CalculateForceFromComponents(Vector2 steeringForceComponents)
         {
             var normalForce = steeringForceComponents.x;
             var tangentForce = steeringForceComponents.y;
