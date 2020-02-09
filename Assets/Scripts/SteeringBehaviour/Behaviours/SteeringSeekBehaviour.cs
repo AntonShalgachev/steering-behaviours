@@ -36,8 +36,6 @@ namespace UnityPrototype
             if (Mathf.Abs(targetSpeed) < Mathf.Epsilon)
                 deltaAngle = 0.0f;
 
-            Debug.Log(deltaAngle);
-
             deltaSpeed = Mathf.Clamp(deltaSpeed, -m_velocityMagnitudeAttenuation, m_velocityMagnitudeAttenuation) / m_velocityMagnitudeAttenuation;
             deltaAngle = Mathf.Clamp(deltaAngle, -m_velocityAngleAttenuation, m_velocityAngleAttenuation) / m_velocityAngleAttenuation;
 
