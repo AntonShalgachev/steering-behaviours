@@ -6,6 +6,9 @@ namespace UnityPrototype
 {
     public class SteeringSeekBehaviour : ISteeringBehaviour
     {
+        [SerializeField] private float m_velocityAngleAttenuation = 5.0f;
+        [SerializeField] private float m_velocityMagnitudeAttenuation = 1.0f;
+
         [SerializeField] private Transform m_target = null;
 
         protected override Vector2? CalculateForceComponentsInternal()
@@ -30,16 +33,20 @@ namespace UnityPrototype
             var deltaSpeed = targetSpeed - speed;
             var deltaAngle = Mathf.DeltaAngle(targetAngle, angle);
 
+            if (Mathf.Abs(targetSpeed) < Mathf.Epsilon)
+                deltaAngle = 0.0f;
+
+            Debug.Log(deltaAngle);
+
+            deltaSpeed = Mathf.Clamp(deltaSpeed, -m_velocityMagnitudeAttenuation, m_velocityMagnitudeAttenuation) / m_velocityMagnitudeAttenuation;
+            deltaAngle = Mathf.Clamp(deltaAngle, -m_velocityAngleAttenuation, m_velocityAngleAttenuation) / m_velocityAngleAttenuation;
+
             var maxTangentForce = deltaSpeed > 0.0f ? m_maxAccelerationForce : m_maxBrakingForce;
 
-            var tangentForce = Mathf.Sign(deltaSpeed) * maxTangentForce;
-            var normalForce = Mathf.Sign(deltaAngle) * m_maxSteeringForce;
+            var tangentForce = deltaSpeed * maxTangentForce;
+            var normalForce = deltaAngle * m_maxSteeringForce;
 
             return new Vector2(normalForce, tangentForce);
-
-            // var force = tangentForce * m_forward + normalForce * m_right;
-
-            // return force;
         }
     }
 }

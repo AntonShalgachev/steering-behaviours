@@ -231,7 +231,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxSpeed: 10
-  m_maxForce: 10
+  m_maxSteeringForce: 50
+  m_maxAccelerationForce: 10
+  m_maxBrakingForce: 50
   m_speedControlRate: 30
 --- !u!114 &1135234038731458047
 MonoBehaviour:
@@ -247,8 +249,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_maxSpeedMultiplier: 0.5
   m_maxForceMultiplier: 0.5
-  m_tangentWeight: 1
-  m_normalWeight: 1
+  m_velocityAngleAttenuation: 15
+  m_velocityMagnitudeAttenuation: 3
   m_target: {fileID: 0}
 --- !u!1 &5408048997566168652
 GameObject:
