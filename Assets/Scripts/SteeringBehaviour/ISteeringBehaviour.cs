@@ -18,9 +18,10 @@ namespace UnityPrototype
             [Min(0.0f)] public float velocityMagnitudeAttenuation = 3.0f;
         }
 
-        [SerializeField] protected CommonBehaviourParameters m_commonParameters = new CommonBehaviourParameters();
+        [SerializeField, Min(0.0f)] private float m_weight = 1.0f;
+        [SerializeField] private CommonBehaviourParameters m_commonParameters = new CommonBehaviourParameters();
 
-        public CommonBehaviourParameters commonParameters => m_commonParameters;
+        public float weight => m_weight;
 
         private SteeringBehaviourController m_cachedController = null;
         private SteeringBehaviourController m_controller
@@ -67,6 +68,8 @@ namespace UnityPrototype
         {
             m_behaviourIndex = m_controller.AddBehaviour(this);
             Debug.Assert(m_behaviourIndex >= 0);
+
+            Debug.Assert(m_weight >= 0.0f);
         }
 
         private void OnDisable()
@@ -78,7 +81,7 @@ namespace UnityPrototype
         {
             var force = CalculateForceComponentsInternal();
 
-            m_lastAppliedForce = m_controller.CalculateForceFromComponents(force.GetValueOrDefault(Vector2.zero));
+            m_lastAppliedForce = m_controller.CalculateForceFromComponents(force.GetValueOrDefault(Vector2.zero) * m_weight);
 
             return force;
         }

@@ -66,22 +66,40 @@ namespace UnityPrototype
             if (speed > maxSpeed)
                 brakingForce += velocity.normalized * (maxSpeed - speed) * m_speedControlRate;
 
+            var steeringForce = CalculateSteeringForce();
+
+            var totalForce = steeringForce + brakingForce;
+
+            body.AddForce(totalForce);
+        }
+
+        private Vector2 CalculateSteeringForce()
+        {
             var steeringForceComponents = Vector2.zero;
+            var weightsSum = 0.0f;
             foreach (var behaviour in m_behaviours)
             {
-                var forceComponentsResult = behaviour.CalculateForceComponents();
-                if (forceComponentsResult == null)
+                var forceComponents = behaviour.CalculateForceComponents();
+                if (forceComponents == null)
                     continue;
 
-                var forceComponents = forceComponentsResult.Value;
-                steeringForceComponents += forceComponents;
+                Debug.Assert(behaviour.weight >= 0.0f);
+
+                steeringForceComponents += forceComponents.Value * behaviour.weight;
+                weightsSum += behaviour.weight;
             }
+
+            Debug.Assert(weightsSum >= 0.0f);
+
+            if (weightsSum > 0.0f)
+                steeringForceComponents /= weightsSum;
+            else
+                Debug.Assert(Vector2.Distance(steeringForceComponents, Vector2.zero) < Mathf.Epsilon);
 
             steeringForceComponents = ClampForceComponents(steeringForceComponents);
             m_lastAppliedForce = steeringForceComponents;
-            var totalForce = CalculateForceFromComponents(steeringForceComponents) + brakingForce;
 
-            body.AddForce(totalForce);
+            return CalculateForceFromComponents(steeringForceComponents);
         }
 
         private Vector2 ClampForceComponents(Vector2 steeringForceComponents)
