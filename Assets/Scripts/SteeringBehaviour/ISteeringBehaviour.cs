@@ -49,6 +49,7 @@ namespace UnityPrototype
         protected Vector2 m_right => m_controller.right;
 
         private Vector2 m_lastAppliedForce = Vector2.zero;
+        private Vector2 m_lastAppliedForceComponents = Vector2.zero;
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
 
         private int m_behaviourIndex = -1;
@@ -77,11 +78,12 @@ namespace UnityPrototype
             m_controller.RemoveBehaviour(this);
         }
 
-        public Vector2? CalculateForceComponents()
+        public Vector2? CalculateLocalForce()
         {
             var force = CalculateForceComponentsInternal();
 
-            m_lastAppliedForce = m_controller.CalculateForceFromComponents(force.GetValueOrDefault(Vector2.zero) * m_weight);
+            m_lastAppliedForceComponents = force.GetValueOrDefault(Vector2.zero) * m_weight;
+            m_lastAppliedForce = m_controller.CalculateForceFromComponents(m_lastAppliedForceComponents);
 
             return force;
         }
@@ -90,32 +92,32 @@ namespace UnityPrototype
 
         public Vector2 CalculateForceForVelocity(Vector2 targetVelocity)
         {
-            var speed = velocity.magnitude;
+            float stabilizationCoefficient = 0.0f;
+
+            var speed = m_controller.speed;
             var targetSpeed = targetVelocity.magnitude;
 
-            var angle = Vector2.SignedAngle(Vector2.up, velocity);
-            var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity);
+            var angle = m_controller.angle;
+            var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity) - stabilizationCoefficient * m_controller.angularVelocity;
 
             var deltaSpeed = targetSpeed - speed;
-            var deltaAngle = Mathf.DeltaAngle(targetAngle, angle);
+            var deltaAngle = Mathf.DeltaAngle(angle, targetAngle);
 
             if (Mathf.Abs(targetSpeed) < Mathf.Epsilon)
                 deltaAngle = 0.0f;
 
-            var tangentMultiplier = Mathf.Clamp(deltaSpeed, -m_commonParameters.velocityMagnitudeAttenuation, m_commonParameters.velocityMagnitudeAttenuation) / m_commonParameters.velocityMagnitudeAttenuation;
-            var normalMultiplier = Mathf.Clamp(deltaAngle, -m_commonParameters.velocityAngleAttenuation, m_commonParameters.velocityAngleAttenuation) / m_commonParameters.velocityAngleAttenuation;
+            var tangentMultiplier = Mathf.Clamp(deltaSpeed / m_commonParameters.velocityMagnitudeAttenuation, -1.0f, 1.0f);
+            var normalMultiplier = -Mathf.Clamp(deltaAngle / m_commonParameters.velocityAngleAttenuation, -1.0f, 1.0f);
 
-            Debug.Log(deltaAngle);
+            var maxTangentForce = tangentMultiplier > 0.0f ? maxAccelerationForce : maxBrakingForce;
 
-            var maxTangentForce = deltaSpeed > 0.0f ? maxAccelerationForce : maxBrakingForce;
-
-            var tangentForce = deltaSpeed * maxTangentForce;
-            var normalForce = deltaAngle * maxSteeringForce;
+            var tangentForce = tangentMultiplier * maxTangentForce;
+            var normalForce = normalMultiplier * maxSteeringForce;
 
             return new Vector2(normalForce, tangentForce);
         }
 
-        private void OnDrawGizmos()
+        protected virtual void DrawGizmos()
         {
             if (m_behaviourIndex < 0)
                 return;
@@ -123,7 +125,15 @@ namespace UnityPrototype
             var colorIndex = m_behaviourIndex % m_debugColors.Length;
             Gizmos.color = m_debugColors[colorIndex];
 
-            Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_lastAppliedForce);
+            // Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_lastAppliedForce);
+
+            GizmosHelper.DrawVector(transform.position, m_right * m_lastAppliedForceComponents.x);
+            GizmosHelper.DrawVector(transform.position, m_forward * m_lastAppliedForceComponents.y);
+        }
+
+        private void OnDrawGizmos()
+        {
+            DrawGizmos();
         }
     }
 }

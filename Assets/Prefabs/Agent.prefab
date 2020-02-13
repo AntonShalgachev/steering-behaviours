@@ -231,9 +231,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxSpeed: 10
-  m_maxSteeringForce: 50
   m_maxAccelerationForce: 10
   m_maxBrakingForce: 50
+  m_maxSteeringForce: 100
+  m_speedForMaxSteeringForce: 5
   m_speedControlRate: 30
 --- !u!114 &3898800651184481139
 MonoBehaviour:
@@ -254,7 +255,9 @@ MonoBehaviour:
     velocityAngleAttenuation: 15
     velocityMagnitudeAttenuation: 3
   m_target: {fileID: 0}
-  m_radius: 1
+  m_slowNearTarget: 1
+  m_brakingRadius: 3
+  m_epsilonRadius: 0.01
 --- !u!1 &5408048997566168652
 GameObject:
   m_ObjectHideFlags: 0

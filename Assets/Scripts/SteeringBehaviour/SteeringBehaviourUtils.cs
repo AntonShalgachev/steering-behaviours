@@ -16,11 +16,13 @@ namespace UnityPrototype
             return agent.CalculateForceForVelocity(targetVelocity);
         }
 
-        public static Vector2 Arrival(Vector2 targetPosition, float targetRadius, ISteeringBehaviour agent)
+        public static Vector2 Arrival(Vector2 targetPosition, float targetRadius, float epsilonRadius, ISteeringBehaviour agent)
         {
             var dPos = targetPosition - agent.position;
             var distanceToTarget = dPos.magnitude;
             var speedMultiplier = Mathf.Clamp01(Mathf.InverseLerp(0.0f, targetRadius, distanceToTarget));
+            if (distanceToTarget < epsilonRadius)
+                speedMultiplier = 0.0f;
             var targetVelocity = dPos.normalized * agent.maxSpeed * speedMultiplier;
             return agent.CalculateForceForVelocity(targetVelocity);
         }

@@ -323,26 +323,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1135234038731458047, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_target
-      value: 
-      objectReference: {fileID: 645380803}
     - target: {fileID: 3898800651184481139, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_target
       value: 
       objectReference: {fileID: 645380803}
-    - target: {fileID: 3898800651184481139, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_radius
-      value: 3.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434952303858725611, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_maxSteeringForce
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501985, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_Name
@@ -351,7 +336,7 @@ PrefabInstance:
     - target: {fileID: 5408048997544501986, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -16.42
       objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501986, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
