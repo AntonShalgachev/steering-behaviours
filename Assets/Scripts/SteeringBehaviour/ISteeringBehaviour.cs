@@ -102,8 +102,10 @@ namespace UnityPrototype
             if (Mathf.Abs(targetSpeed) < Mathf.Epsilon)
                 deltaAngle = 0.0f;
 
-            deltaSpeed = Mathf.Clamp(deltaSpeed, -m_commonParameters.velocityMagnitudeAttenuation, m_commonParameters.velocityMagnitudeAttenuation) / m_commonParameters.velocityMagnitudeAttenuation;
-            deltaAngle = Mathf.Clamp(deltaAngle, -m_commonParameters.velocityAngleAttenuation, m_commonParameters.velocityAngleAttenuation) / m_commonParameters.velocityAngleAttenuation;
+            var tangentMultiplier = Mathf.Clamp(deltaSpeed, -m_commonParameters.velocityMagnitudeAttenuation, m_commonParameters.velocityMagnitudeAttenuation) / m_commonParameters.velocityMagnitudeAttenuation;
+            var normalMultiplier = Mathf.Clamp(deltaAngle, -m_commonParameters.velocityAngleAttenuation, m_commonParameters.velocityAngleAttenuation) / m_commonParameters.velocityAngleAttenuation;
+
+            Debug.Log(deltaAngle);
 
             var maxTangentForce = deltaSpeed > 0.0f ? maxAccelerationForce : maxBrakingForce;
 

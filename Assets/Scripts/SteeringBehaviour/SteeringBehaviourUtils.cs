@@ -15,5 +15,14 @@ namespace UnityPrototype
             var targetVelocity = (agent.position - threatPosition).normalized * agent.maxSpeed;
             return agent.CalculateForceForVelocity(targetVelocity);
         }
+
+        public static Vector2 Arrival(Vector2 targetPosition, float targetRadius, ISteeringBehaviour agent)
+        {
+            var dPos = targetPosition - agent.position;
+            var distanceToTarget = dPos.magnitude;
+            var speedMultiplier = Mathf.Clamp01(Mathf.InverseLerp(0.0f, targetRadius, distanceToTarget));
+            var targetVelocity = dPos.normalized * agent.maxSpeed * speedMultiplier;
+            return agent.CalculateForceForVelocity(targetVelocity);
+        }
     }
 }
