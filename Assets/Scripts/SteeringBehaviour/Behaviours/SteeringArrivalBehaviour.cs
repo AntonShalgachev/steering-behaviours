@@ -17,6 +17,8 @@ namespace UnityPrototype
             if (m_target == null)
                 return null;
 
+            if (!m_slowNearTarget)
+                return SteeringBehaviourUtils.Seek(m_target.position, this);
             return SteeringBehaviourUtils.Arrival(m_target.position, m_brakingRadius, m_epsilonRadius, this);
         }
 

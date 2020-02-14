@@ -20,7 +20,9 @@ namespace UnityPrototype
         {
             var dPos = targetPosition - agent.position;
             var distanceToTarget = dPos.magnitude;
-            var speedMultiplier = Mathf.Clamp01(Mathf.InverseLerp(0.0f, targetRadius, distanceToTarget));
+            var speedMultiplier = 1.0f;
+            if (targetRadius > 0.0f)
+                speedMultiplier = Mathf.Clamp01(Mathf.InverseLerp(0.0f, targetRadius, distanceToTarget));
             if (distanceToTarget < epsilonRadius)
                 speedMultiplier = 0.0f;
             var targetVelocity = dPos.normalized * agent.maxSpeed * speedMultiplier;
