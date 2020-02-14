@@ -24,7 +24,7 @@ namespace UnityPrototype
         public float weight => m_weight;
 
         private SteeringBehaviourController m_cachedController = null;
-        private SteeringBehaviourController m_controller
+        protected SteeringBehaviourController m_controller
         {
             get
             {
@@ -71,6 +71,8 @@ namespace UnityPrototype
             Debug.Assert(m_behaviourIndex >= 0);
 
             Debug.Assert(m_weight >= 0.0f);
+
+            Initialize();
         }
 
         private void OnDisable()
@@ -78,9 +80,9 @@ namespace UnityPrototype
             m_controller.RemoveBehaviour(this);
         }
 
-        public Vector2? CalculateLocalForce()
+        public Vector2? CalculateLocalForce(float dt)
         {
-            var force = CalculateForceComponentsInternal();
+            var force = CalculateForceComponentsInternal(dt);
 
             m_lastAppliedForceComponents = force.GetValueOrDefault(Vector2.zero) * m_weight;
             m_lastAppliedForce = m_controller.CalculateForceFromComponents(m_lastAppliedForceComponents);
@@ -88,7 +90,17 @@ namespace UnityPrototype
             return force;
         }
 
-        protected abstract Vector2? CalculateForceComponentsInternal();
+        protected virtual void Initialize() { }
+
+        protected abstract Vector2? CalculateForceComponentsInternal(float dt);
+
+        public Vector2 CalculateForceForDirection(Vector2 direction, float speedMultiplier = 1.0f)
+        {
+            float epsilon = 1e-5f;
+
+            Debug.Assert(Mathf.Abs(direction.magnitude - 1.0f) < epsilon, "Direction isn't normalized");
+            return CalculateForceForVelocity(direction * maxSpeed * speedMultiplier);
+        }
 
         public Vector2 CalculateForceForVelocity(Vector2 targetVelocity)
         {

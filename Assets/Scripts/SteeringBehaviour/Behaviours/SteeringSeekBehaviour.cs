@@ -8,7 +8,7 @@ namespace UnityPrototype
     {
         [SerializeField] private Transform m_target = null;
 
-        protected override Vector2? CalculateForceComponentsInternal()
+        protected override Vector2? CalculateForceComponentsInternal(float dt)
         {
             if (m_target == null)
                 return null;

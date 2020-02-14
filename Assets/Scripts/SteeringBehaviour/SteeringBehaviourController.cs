@@ -52,8 +52,27 @@ namespace UnityPrototype
         [ShowNonSerializedField] private Vector2 m_lastAppliedForce = Vector2.zero;
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
 
+        public float time => Time.fixedTime;
+
+        private bool m_initialized = false;
+
+        private void TryInitialize()
+        {
+            if (m_initialized)
+                return;
+
+            forward = transform.up;
+            angle = Vector2.SignedAngle(Vector2.up, forward);
+
+            transform.rotation = Quaternion.identity;
+
+            m_initialized = true;
+        }
+
         public int AddBehaviour(ISteeringBehaviour behaviour)
         {
+            TryInitialize();
+
             Debug.Assert(!m_behaviours.Contains(behaviour));
 
             var index = m_behaviours.Count;
@@ -95,7 +114,7 @@ namespace UnityPrototype
             var weightsSum = 0.0f;
             foreach (var behaviour in m_behaviours)
             {
-                var localForce = behaviour.CalculateLocalForce();
+                var localForce = behaviour.CalculateLocalForce(Time.fixedDeltaTime);
                 if (localForce == null)
                     continue;
 

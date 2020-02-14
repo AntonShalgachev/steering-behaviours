@@ -99,5 +99,21 @@ namespace UnityPrototype
             UnityEditor.Handles.Label(position, text, style);
 #endif
         }
+
+        public static void DrawFunction(Vector2 position, System.Func<float, float> func, float step, float maxTime, float tScale = 1.0f, float valScale = 1.0f)
+        {
+            var points = new List<Vector2>();
+
+            var t = 0.0f;
+            while (t <= maxTime)
+            {
+                var value = func(t);
+                points.Add(new Vector2(t * tScale, value * valScale) + position);
+
+                t += step;
+            }
+
+            DrawCurve(points);
+        }
     }
 }

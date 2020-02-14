@@ -12,7 +12,7 @@ namespace UnityPrototype
         [SerializeField, Min(0.0001f), ShowIf("m_slowNearTarget")] private float m_brakingRadius = 1.0f;
         [SerializeField, Min(0.0001f), ShowIf("m_slowNearTarget")] private float m_epsilonRadius = 0.1f;
 
-        protected override Vector2? CalculateForceComponentsInternal()
+        protected override Vector2? CalculateForceComponentsInternal(float dt)
         {
             if (m_target == null)
                 return null;

@@ -328,6 +328,16 @@ PrefabInstance:
       propertyPath: m_target
       value: 
       objectReference: {fileID: 645380803}
+    - target: {fileID: 4054993944167616484, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_smooth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4054993944167616484, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_rotationSpeed
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501985, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_Name
@@ -361,12 +371,12 @@ PrefabInstance:
     - target: {fileID: 5408048997544501986, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501986, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501986, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
@@ -386,7 +396,42 @@ PrefabInstance:
     - target: {fileID: 5408048997544501986, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004878938623345259, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_frequency
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004878938623345259, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_angleRange
+      value: 30.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004878938623345259, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_seed
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004878938623345259, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_circleDistance
+      value: 79.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004878938623345259, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_circleRadius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004878938623345259, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_commonParameters.maxForceMultiplier
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004878938623345259, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_commonParameters.maxSpeedMultiplier
+      value: 0.14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
