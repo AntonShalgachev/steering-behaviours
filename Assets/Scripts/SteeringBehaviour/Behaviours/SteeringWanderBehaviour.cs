@@ -7,7 +7,23 @@ namespace UnityPrototype
 {
     public class SteeringWanderBehaviour : ISteeringBehaviour
     {
-        [SerializeField] private float m_angleRange = 90.0f;
+        private enum NoiseType
+        {
+            Perlin,
+            Sine,
+            Random,
+        }
+
+        private enum NoiseMode
+        {
+            NoiseAsValue,
+            NoiseAsSpeed,
+        }
+
+        [SerializeField] private NoiseType m_noiseType = NoiseType.Perlin;
+        [SerializeField] private NoiseMode m_noiseMode = NoiseMode.NoiseAsSpeed;
+
+        [SerializeField] private float m_angleRange = 180.0f;
         [SerializeField] private float m_frequency = 1.0f;
 
         [SerializeField] private float m_circleDistance = 5.0f;
@@ -37,35 +53,54 @@ namespace UnityPrototype
 
         private float GetNextAngle(float prevAngle, float t, float dt)
         {
-            var angleRange = 180.0f;
+            switch (m_noiseMode)
+            {
+                case NoiseMode.NoiseAsSpeed:
+                    return prevAngle + GetNoise(t) * m_angleRange * dt;
+                case NoiseMode.NoiseAsValue:
+                    return GetNoise(t) * m_angleRange;
+            }
 
-            return prevAngle + GetNoise(t) * angleRange * dt;
+            Debug.Assert(false);
+            return 0.0f;
+
+            // return prevAngle + GetNoise(t) * angleRange * dt;
             // return GetNoise(t) * angleRange;
         }
 
         private float GetNoise(float t)
         {
-            var noise = 2.0f * Mathf.PerlinNoise(m_seed, m_seed + t * m_frequency) - 1.0f;
+            switch (m_noiseType)
+            {
+                case NoiseType.Perlin:
+                    return 2.0f * Mathf.PerlinNoise(m_seed, m_seed + t * m_frequency) - 1.0f; ;
+                case NoiseType.Sine:
+                    return Mathf.Sin(m_seed + t * m_frequency);
+                case NoiseType.Random:
+                    return Random.Range(-1.0f, 1.0f);
+            }
+
+            Debug.Assert(false);
+            return 0.0f;
+
+            // var noise = 2.0f * Mathf.PerlinNoise(m_seed, m_seed + t * m_frequency) - 1.0f;
             // var noise = Mathf.Sin(m_seed + t * m_frequency);
             // var noise = Random.Range(-1.0f, 1.0f);
 
-            return noise;
+            // return noise;
         }
 
         protected override void DrawGizmos()
         {
             base.DrawGizmos();
 
-            Gizmos.color = Color.magenta;
-            GizmosHelper.DrawFunction(position, GetNoise, 0.1f, 100.0f);
-
             if (Application.isPlaying)
             {
-                // if (m_initialApproximation == null)
-                //     m_initialApproximation = CalculateApproximation(position, m_forward, m_wanderAngle);
+                if (m_initialApproximation == null)
+                    m_initialApproximation = CalculateApproximation(position, m_forward, m_wanderAngle);
 
-                // Gizmos.color = Color.red;
-                // GizmosHelper.DrawCurve(m_initialApproximation);
+                Gizmos.color = Color.red;
+                GizmosHelper.DrawCurve(m_initialApproximation);
 
                 Gizmos.color = Color.green;
                 var circleCenter = position + m_forward * m_circleDistance;
@@ -79,6 +114,9 @@ namespace UnityPrototype
             }
             else
             {
+                Gizmos.color = Color.magenta;
+                GizmosHelper.DrawFunction(position, GetNoise, 0.1f, 100.0f);
+
                 Gizmos.color = Color.green;
                 var initialAngle = Vector2.SignedAngle(Vector2.up, transform.up);
                 var points = CalculateApproximation(position, transform.up, initialAngle);
