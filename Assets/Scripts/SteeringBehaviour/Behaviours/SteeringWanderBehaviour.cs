@@ -47,7 +47,6 @@ namespace UnityPrototype
         {
             m_wanderAngle = GetNextAngle(m_wanderAngle, m_controller.time, dt);
 
-            // return null;
             return SteeringBehaviourUtils.Seek(m_targetPoint, this);
         }
 
@@ -63,9 +62,6 @@ namespace UnityPrototype
 
             Debug.Assert(false);
             return 0.0f;
-
-            // return prevAngle + GetNoise(t) * angleRange * dt;
-            // return GetNoise(t) * angleRange;
         }
 
         private float GetNoise(float t)
@@ -82,12 +78,6 @@ namespace UnityPrototype
 
             Debug.Assert(false);
             return 0.0f;
-
-            // var noise = 2.0f * Mathf.PerlinNoise(m_seed, m_seed + t * m_frequency) - 1.0f;
-            // var noise = Mathf.Sin(m_seed + t * m_frequency);
-            // var noise = Random.Range(-1.0f, 1.0f);
-
-            // return noise;
         }
 
         protected override void DrawGizmos()
