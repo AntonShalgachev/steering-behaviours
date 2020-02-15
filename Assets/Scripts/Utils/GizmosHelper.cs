@@ -100,20 +100,45 @@ namespace UnityPrototype
 #endif
         }
 
-        public static void DrawFunction(Vector2 position, System.Func<float, float> func, float step, float maxTime, float tScale = 1.0f, float valScale = 1.0f)
+        public static void DrawRectangle(Vector2 center, Vector2 size)
+        {
+            Gizmos.DrawCube(center, size);
+        }
+
+        public static void DrawFunction(Vector2 position, System.Func<float, float> func, float from, float to, float step, float tScale = 1.0f, float valScale = 1.0f)
         {
             var points = new List<Vector2>();
 
-            var t = 0.0f;
-            while (t <= maxTime)
-            {
-                var value = func(t);
-                points.Add(new Vector2(t * tScale, value * valScale) + position);
+            Gizmos.DrawLine(position - Vector2.right * from, position + Vector2.right * to);
 
-                t += step;
-            }
+            for (var t = from; t <= to; t += step)
+                points.Add(GetFunctionPoint(position, func, t, tScale, valScale));
 
             DrawCurve(points);
+        }
+
+        public static void DrawHistogram(Vector2 position, IEnumerable<float> values, float columnWidth = 1.0f, float valScale = 1.0f)
+        {
+            var offset = Vector2.zero;
+            foreach (var value in values)
+            {
+                var height = value * valScale;
+                var size = new Vector2(columnWidth, height);
+                var center = position + offset + 0.5f * size;
+                DrawRectangle(center, size);
+                offset.x += columnWidth;
+            }
+        }
+
+        public static void DrawFunctionValue(Vector2 position, System.Func<float, float> func, float t, float tScale = 1.0f, float valScale = 1.0f, float pointSize = 0.1f)
+        {
+            Gizmos.DrawSphere(GetFunctionPoint(position, func, t, tScale, valScale), pointSize);
+        }
+
+        private static Vector2 GetFunctionPoint(Vector2 position, System.Func<float, float> func, float t, float tScale = 1.0f, float valScale = 1.0f)
+        {
+            var value = func(t);
+            return new Vector2(t * tScale, value * valScale) + position;
         }
     }
 }

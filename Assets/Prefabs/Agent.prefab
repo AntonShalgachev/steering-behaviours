@@ -231,6 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxSpeed: 10
+  m_initialDirectionAngle: -90
   m_maxAccelerationForce: 10
   m_maxBrakingForce: 50
   m_maxSteeringForce: 100
@@ -251,16 +252,14 @@ MonoBehaviour:
   m_weight: 1
   m_commonParameters:
     maxSpeedMultiplier: 0.25
-    maxForceMultiplier: 0.5
+    maxForceMultiplier: 0.25
     velocityAngleAttenuation: 15
     velocityMagnitudeAttenuation: 3
-  m_noiseType: 0
-  m_noiseMode: 0
-  m_angleRange: 360
-  m_frequency: 2.04
-  m_circleDistance: 5
-  m_circleRadius: 4
-  m_seed: 6.73
+  m_noiseType: 2
+  m_amplitude: 0.419
+  m_frequency: 1
+  m_seed: 0
+  m_keepMaxSpeed: 1
 --- !u!1 &5408048997566168652
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5408048997606753623}
   - component: {fileID: 4054993944167616484}
+  - component: {fileID: 2766790048820430703}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -316,7 +316,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5408048997606753622}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -339,6 +339,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_smooth: 0
   m_rotationSpeed: 90
+--- !u!114 &2766790048820430703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5408048997606753622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fef5be2f67f4a7940ada5484e4c99157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8684694226387343028
 GameObject:
   m_ObjectHideFlags: 0

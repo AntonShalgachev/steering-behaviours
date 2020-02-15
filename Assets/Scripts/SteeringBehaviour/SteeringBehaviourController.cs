@@ -11,6 +11,8 @@ namespace UnityPrototype
     {
         [SerializeField] private float m_maxSpeed = 10.0f;
 
+        [SerializeField, Range(-180.0f, 180.0f)] private float m_initialDirectionAngle = 0.0f;
+
         [Header("Forces")]
         [SerializeField] private float m_maxAccelerationForce = 10.0f;
         [SerializeField] private float m_maxBrakingForce = 10.0f;
@@ -23,16 +25,16 @@ namespace UnityPrototype
         public float maxSpeed => m_maxSpeed;
         [ShowNativeProperty] public float maxAccelerationForce => m_maxAccelerationForce;
         public float maxBrakingForce => m_maxBrakingForce;
-        [ShowNativeProperty] public float maxSteeringForce => Mathf.Lerp(0.0f, m_maxSteeringForce, Mathf.InverseLerp(0.0f, m_speedForMaxSteeringForce, speed));
+        [ShowNativeProperty] public float maxSteeringForce => Application.isPlaying ? Mathf.Lerp(0.0f, m_maxSteeringForce, Mathf.InverseLerp(0.0f, m_speedForMaxSteeringForce, speed)) : m_maxSteeringForce;
 
-        private Rigidbody2D m_body = null;
+        private Rigidbody2D m_cachedBody = null;
         public Rigidbody2D body
         {
             get
             {
-                if (m_body == null)
-                    m_body = GetComponent<Rigidbody2D>();
-                return m_body;
+                if (m_cachedBody == null)
+                    m_cachedBody = GetComponent<Rigidbody2D>();
+                return m_cachedBody;
             }
         }
 
@@ -44,10 +46,12 @@ namespace UnityPrototype
         public Vector2 acceleration { get; private set; } = Vector2.zero;
         [ShowNativeProperty] public float speed => velocity.magnitude;
 
-        public Vector2 forward { get; private set; } = Vector2.up;
-        public Vector2 right => forward.Rotate(-90);
-        public float angle { get; private set; } = 0.0f;
-        [ShowNativeProperty] public float angularVelocity { get; private set; } = 0.0f;
+        private Vector2 m_initialForward => Vector2.up.Rotate(m_initialDirectionAngle);
+        private Vector2 m_runtimeForward = Vector2.up;
+
+        public Vector2 forward => Application.isPlaying ? m_runtimeForward : m_initialForward;
+        public Vector2 right => forward.Rotate270();
+        public float angle => Vector2.SignedAngle(Vector2.up, forward);
 
         [ShowNonSerializedField] private Vector2 m_lastAppliedForce = Vector2.zero;
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
@@ -61,10 +65,7 @@ namespace UnityPrototype
             if (m_initialized)
                 return;
 
-            forward = transform.up;
-            angle = Vector2.SignedAngle(Vector2.up, forward);
-
-            transform.rotation = Quaternion.identity;
+            m_runtimeForward = Vector2.up.Rotate(m_initialDirectionAngle);
 
             m_initialized = true;
         }
@@ -89,13 +90,7 @@ namespace UnityPrototype
         {
             var newForward = velocity.normalized;
             if (speed > Mathf.Epsilon && newForward.magnitude > Mathf.Epsilon)
-            {
-                forward = newForward;
-                var newAngle = Vector2.SignedAngle(Vector2.up, forward);
-                var angleDiff = newAngle - angle;
-                angle = newAngle;
-                angularVelocity = angleDiff / Time.fixedDeltaTime;
-            }
+                m_runtimeForward = newForward;
 
             var brakingForce = Vector2.zero;
             if (speed > maxSpeed)

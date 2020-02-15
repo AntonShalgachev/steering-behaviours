@@ -10,23 +10,34 @@ namespace UnityPrototype
         [SerializeField] private bool m_smooth = true;
         [SerializeField, ShowIf("m_smooth")] private float m_rotationSpeed = 90.0f;
 
-        private SteeringBehaviourController m_controller = null;
-        private bool m_hardSyncRotation = true;
-
-        private void Awake()
+        private SteeringBehaviourController m_cachedController = null;
+        private SteeringBehaviourController m_controller
         {
-            m_controller = GetComponentInParent<SteeringBehaviourController>();
+            get
+            {
+                if (m_cachedController == null)
+                    m_cachedController = GetComponentInParent<SteeringBehaviourController>();
+                return m_cachedController;
+            }
         }
+        private bool m_hardSyncRotation = true;
 
         private void LateUpdate()
         {
-            var targetAngle = Vector2.SignedAngle(Vector2.up, m_controller.forward);
+            UpdateOrientation(m_smooth && !m_hardSyncRotation);
+            m_hardSyncRotation = false;
+        }
+
+        public void UpdateOrientation(bool smooth)
+        {
+            var targetAngle = m_controller.angle;
             var angle = targetAngle;
-            if (m_smooth && !m_hardSyncRotation)
+            if (smooth)
             {
                 var currentAngle = Vector2.SignedAngle(Vector2.up, transform.up);
                 angle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, Time.deltaTime * m_rotationSpeed);
             }
+
             transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
         }
     }

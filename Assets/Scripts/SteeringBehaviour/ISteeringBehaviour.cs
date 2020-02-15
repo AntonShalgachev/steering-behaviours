@@ -104,29 +104,30 @@ namespace UnityPrototype
 
         public Vector2 CalculateForceForVelocity(Vector2 targetVelocity)
         {
-            float stabilizationCoefficient = 0.0f;
-
-            var speed = m_controller.speed;
             var targetSpeed = targetVelocity.magnitude;
+            var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity);
 
-            var angle = m_controller.angle;
-            var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity) - stabilizationCoefficient * m_controller.angularVelocity;
-
-            var deltaSpeed = targetSpeed - speed;
-            var deltaAngle = Mathf.DeltaAngle(angle, targetAngle);
-
-            if (Mathf.Abs(targetSpeed) < Mathf.Epsilon)
-                deltaAngle = 0.0f;
-
-            var tangentMultiplier = Mathf.Clamp(deltaSpeed / m_commonParameters.velocityMagnitudeAttenuation, -1.0f, 1.0f);
-            var normalMultiplier = -Mathf.Clamp(deltaAngle / m_commonParameters.velocityAngleAttenuation, -1.0f, 1.0f);
-
-            var maxTangentForce = tangentMultiplier > 0.0f ? maxAccelerationForce : maxBrakingForce;
-
-            var tangentForce = tangentMultiplier * maxTangentForce;
-            var normalForce = normalMultiplier * maxSteeringForce;
+            var normalForce = ClaculateNormalForce(targetAngle);
+            var tangentForce = ClaculateTangentForce(targetSpeed);
 
             return new Vector2(normalForce, tangentForce);
+        }
+
+        public float ClaculateNormalForce(float targetAngle)
+        {
+            var angle = m_controller.angle;
+            var deltaAngle = Mathf.DeltaAngle(angle, targetAngle);
+            var forceMultiplier = -Mathf.Clamp(deltaAngle / m_commonParameters.velocityAngleAttenuation, -1.0f, 1.0f);
+            return forceMultiplier * maxSteeringForce;
+        }
+
+        public float ClaculateTangentForce(float targetSpeed)
+        {
+            var speed = m_controller.speed;
+            var deltaSpeed = targetSpeed - speed;
+            var forceMultiplier = Mathf.Clamp(deltaSpeed / m_commonParameters.velocityMagnitudeAttenuation, -1.0f, 1.0f);
+            var maxTangentForce = forceMultiplier > 0.0f ? maxAccelerationForce : maxBrakingForce;
+            return forceMultiplier * maxTangentForce;
         }
 
         protected virtual void DrawGizmos()
@@ -136,8 +137,6 @@ namespace UnityPrototype
 
             var colorIndex = m_behaviourIndex % m_debugColors.Length;
             Gizmos.color = m_debugColors[colorIndex];
-
-            // Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_lastAppliedForce);
 
             GizmosHelper.DrawVector(transform.position, m_right * m_lastAppliedForceComponents.x);
             GizmosHelper.DrawVector(transform.position, m_forward * m_lastAppliedForceComponents.y);
