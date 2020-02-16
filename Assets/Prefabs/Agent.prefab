@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 5408048997544501986}
   - component: {fileID: 1530774259299284807}
   - component: {fileID: 4434952303858725611}
-  - component: {fileID: 7004878938623345259}
+  - component: {fileID: 5408048999642368642}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_maxSteeringForce: 100
   m_speedForMaxSteeringForce: 5
   m_speedControlRate: 30
---- !u!114 &7004878938623345259
+--- !u!114 &5408048999642368642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,20 +246,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 5408048997544501985}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6532cee6c2b94e19a2017a4492b1eda, type: 3}
+  m_Script: {fileID: 11500000, guid: eaa0cb23221dd164d8f525b4026031ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_weight: 1
   m_commonParameters:
-    maxSpeedMultiplier: 0.25
-    maxForceMultiplier: 0.25
+    maxSpeedMultiplier: 0.5
+    maxForceMultiplier: 0.5
     velocityAngleAttenuation: 15
     velocityMagnitudeAttenuation: 3
-  m_noiseType: 2
-  m_amplitude: 0.419
-  m_frequency: 1
-  m_seed: 0
-  m_keepMaxSpeed: 1
+  m_path: {fileID: 0}
+  m_pointRadius: 1
+  m_slowNearLastPoint: 1
+  m_brakingRadius: 1
+  m_epsilonRadius: 0.1
 --- !u!1 &5408048997566168652
 GameObject:
   m_ObjectHideFlags: 0
