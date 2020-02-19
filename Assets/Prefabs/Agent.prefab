@@ -254,11 +254,11 @@ MonoBehaviour:
     maxSpeedMultiplier: 1
     maxForceMultiplier: 1
     velocityAngleAttenuation: 15
-    velocityMagnitudeAttenuation: 3
+    velocityMagnitudeAttenuation: 0.5
   m_target: {fileID: 0}
   m_slowNearTarget: 1
-  m_brakingRadius: 1
-  m_epsilonRadius: 0.1
+  m_brakingRadiusMultiplier: 1.1
+  m_epsilonRadius: 0.01
 --- !u!1 &5408048997566168652
 GameObject:
   m_ObjectHideFlags: 0

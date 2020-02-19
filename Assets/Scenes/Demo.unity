@@ -679,36 +679,6 @@ PrefabInstance:
       propertyPath: m_target
       value: 
       objectReference: {fileID: 645380803}
-    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_commonParameters.maxSpeedMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_commonParameters.maxForceMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_brakingRadius
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_epsilonRadius
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_commonParameters.velocityMagnitudeAttenuation
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_brakingRadiusMultiplier
-      value: 1.1
-      objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501985, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_Name
@@ -769,10 +739,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5408048999642368642, guid: 74f0f767da878194695b49d0c1ec726d,
-        type: 3}
-      propertyPath: m_path
-      value: 
-      objectReference: {fileID: 1864721276}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}

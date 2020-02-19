@@ -45,7 +45,7 @@ namespace UnityPrototype
         public Vector2 velocity => body.velocity;
         public Vector2 localAcceleration { get; private set; } = Vector2.zero;
         public Vector2 acceleration { get; private set; } = Vector2.zero;
-        [ShowNativeProperty] public float speed => velocity.magnitude;
+        [ShowNativeProperty] public float speed => Vector2.Dot(velocity, forward);
 
         private Vector2 m_initialForward => Vector2.up.Rotate(m_initialDirectionAngle);
         private Vector2 m_runtimeForward = Vector2.up;
@@ -57,6 +57,7 @@ namespace UnityPrototype
         public float mass => body.mass;
 
         [ShowNonSerializedField] private Vector2 m_lastAppliedForce = Vector2.zero;
+        [ShowNonSerializedField] private Vector2 m_lastAppliedSpeedControlForce = Vector2.zero;
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
 
         public float time => Time.fixedTime;
@@ -98,16 +99,22 @@ namespace UnityPrototype
         private void Step(float dt)
         {
             var newForward = velocity.normalized;
-            if (speed > Mathf.Epsilon && newForward.magnitude > Mathf.Epsilon)
+            var dot = Vector2.Dot(newForward, m_runtimeForward);
+            if (dot >= 0.0f && speed > Mathf.Epsilon && newForward.magnitude > Mathf.Epsilon)
                 m_runtimeForward = newForward;
 
-            var brakingForce = Vector2.zero;
-            if (speed > maxSpeed)
-                brakingForce += velocity.normalized * (maxSpeed - speed) * m_speedControlRate;
+            var speedControlForce = Vector2.zero;
+            if (speed < 0.0f || speed > maxSpeed)
+            {
+                var targetSpeed = Mathf.Clamp(speed, 0.0f, maxSpeed);
+                speedControlForce += velocity.normalized * (targetSpeed - speed) * m_speedControlRate;
+            }
+
+            m_lastAppliedSpeedControlForce = speedControlForce;
 
             var steeringForce = CalculateSteeringForce(dt);
 
-            var totalForce = steeringForce + brakingForce;
+            var totalForce = steeringForce + speedControlForce;
 
             body.AddForce(totalForce);
         }
@@ -135,7 +142,7 @@ namespace UnityPrototype
             else
                 Debug.Assert(Vector2.Distance(localSteeringForce, Vector2.zero) < Mathf.Epsilon);
 
-            localSteeringForce = ClampForceComponents(localSteeringForce);
+            localSteeringForce = ClampForceComponents(localSteeringForce, dt);
             m_lastAppliedForce = localSteeringForce;
 
             var steeringForce = CalculateForceFromComponents(localSteeringForce);
@@ -146,13 +153,18 @@ namespace UnityPrototype
             return steeringForce;
         }
 
-        private Vector2 ClampForceComponents(Vector2 steeringForceComponents)
+        private Vector2 ClampForceComponents(Vector2 steeringForceComponents, float dt)
         {
-            var maxTangentForce = steeringForceComponents.y > 0.0f ? maxAccelerationForce : maxBrakingForce;
+            var forceToMinSpeed = (0.0f - speed) * mass / dt;
+            var forceToMaxSpeed = (maxSpeed - speed) * mass / dt;
+
+            var minTangentForce = Mathf.Max(-maxBrakingForce, forceToMinSpeed);
+            var maxTangentForce = Mathf.Min(maxAccelerationForce, forceToMaxSpeed);
+            var minNormalForce = -maxSteeringForce;
             var maxNormalForce = maxSteeringForce;
 
-            steeringForceComponents.x = Mathf.Min(steeringForceComponents.x, maxNormalForce);
-            steeringForceComponents.y = Mathf.Min(steeringForceComponents.y, maxTangentForce);
+            steeringForceComponents.x = Mathf.Clamp(steeringForceComponents.x, minNormalForce, maxNormalForce);
+            steeringForceComponents.y = Mathf.Clamp(steeringForceComponents.y, minTangentForce, maxTangentForce);
 
             return steeringForceComponents;
         }
