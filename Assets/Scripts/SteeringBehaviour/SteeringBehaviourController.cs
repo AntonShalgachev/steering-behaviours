@@ -60,6 +60,7 @@ namespace UnityPrototype
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
 
         public float time => Time.fixedTime;
+        public float timeStep => Time.fixedDeltaTime;
 
         private bool m_initialized = false;
 
@@ -91,6 +92,11 @@ namespace UnityPrototype
 
         private void FixedUpdate()
         {
+            Step(timeStep);
+        }
+
+        private void Step(float dt)
+        {
             var newForward = velocity.normalized;
             if (speed > Mathf.Epsilon && newForward.magnitude > Mathf.Epsilon)
                 m_runtimeForward = newForward;
@@ -99,20 +105,20 @@ namespace UnityPrototype
             if (speed > maxSpeed)
                 brakingForce += velocity.normalized * (maxSpeed - speed) * m_speedControlRate;
 
-            var steeringForce = CalculateSteeringForce();
+            var steeringForce = CalculateSteeringForce(dt);
 
             var totalForce = steeringForce + brakingForce;
 
             body.AddForce(totalForce);
         }
 
-        private Vector2 CalculateSteeringForce()
+        private Vector2 CalculateSteeringForce(float dt)
         {
             var localSteeringForce = Vector2.zero;
             var weightsSum = 0.0f;
             foreach (var behaviour in m_behaviours)
             {
-                var localForce = behaviour.CalculateLocalForce(Time.fixedDeltaTime);
+                var localForce = behaviour.CalculateLocalForce(dt);
                 if (localForce == null)
                     continue;
 

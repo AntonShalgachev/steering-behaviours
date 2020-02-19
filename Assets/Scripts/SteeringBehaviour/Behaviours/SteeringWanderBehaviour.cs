@@ -83,7 +83,7 @@ namespace UnityPrototype
         private List<Vector2> CalculateApproximation(Vector2 position)
         {
             var maxT = 100.0f;
-            var step = Time.fixedDeltaTime;
+            var step = m_timeStep;
 
             var pos = position;
             var velocity = m_forward * maxSpeed;

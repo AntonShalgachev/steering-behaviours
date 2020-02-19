@@ -52,6 +52,7 @@ namespace UnityPrototype
 
         protected float m_mass => m_controller.mass;
         protected float m_time => m_controller.time;
+        protected float m_timeStep => m_controller.timeStep;
 
         private Vector2 m_lastAppliedForce = Vector2.zero;
         private Vector2 m_lastAppliedForceComponents = Vector2.zero;
