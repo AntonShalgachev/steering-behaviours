@@ -146,7 +146,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 74427943}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.81, y: 1.99, z: 0}
+  m_LocalPosition: {x: 16.41, y: -2.96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1864721275}
@@ -189,7 +189,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145988160}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 27.94, y: -4.43, z: 0}
+  m_LocalPosition: {x: 20.25, y: -3.97, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1864721275}
@@ -432,7 +432,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364300728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.32, y: 1.18, z: 0}
+  m_LocalPosition: {x: 17.83, y: 3.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1864721275}
@@ -475,7 +475,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1521416848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.66, y: -2.73, z: 0}
+  m_LocalPosition: {x: 13.98, y: 0.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1864721275}
@@ -633,7 +633,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1864721275
 Transform:
   m_ObjectHideFlags: 0
@@ -674,6 +674,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_target
+      value: 
+      objectReference: {fileID: 645380803}
+    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_commonParameters.maxSpeedMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_commonParameters.maxForceMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_brakingRadius
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_epsilonRadius
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_commonParameters.velocityMagnitudeAttenuation
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3727063561307539501, guid: 74f0f767da878194695b49d0c1ec726d,
+        type: 3}
+      propertyPath: m_brakingRadiusMultiplier
+      value: 1.1
+      objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501985, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_Name

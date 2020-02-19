@@ -9,8 +9,10 @@ namespace UnityPrototype
     {
         [SerializeField] private Transform m_target = null;
         [SerializeField] private bool m_slowNearTarget = true;
-        [SerializeField, Min(0.0001f), ShowIf("m_slowNearTarget")] private float m_brakingRadius = 1.0f;
+        [SerializeField, Min(0.0001f), ShowIf("m_slowNearTarget")] private float m_brakingRadiusMultiplier = 1.0f;
         [SerializeField, Min(0.0001f), ShowIf("m_slowNearTarget")] private float m_epsilonRadius = 0.1f;
+
+        private float m_brakingRadius => m_stoppingDistance * m_brakingRadiusMultiplier;
 
         protected override Vector2? CalculateForceComponentsInternal(float dt)
         {

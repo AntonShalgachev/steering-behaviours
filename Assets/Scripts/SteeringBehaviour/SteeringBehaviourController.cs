@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Gamelogic.Extensions;
 using NaughtyAttributes;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace UnityPrototype
@@ -52,6 +53,8 @@ namespace UnityPrototype
         public Vector2 forward => Application.isPlaying ? m_runtimeForward : m_initialForward;
         public Vector2 right => forward.Rotate270();
         public float angle => Vector2.SignedAngle(Vector2.up, forward);
+
+        public float mass => body.mass;
 
         [ShowNonSerializedField] private Vector2 m_lastAppliedForce = Vector2.zero;
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
@@ -131,8 +134,8 @@ namespace UnityPrototype
 
             var steeringForce = CalculateForceFromComponents(localSteeringForce);
 
-            localAcceleration = localSteeringForce / body.mass;
-            acceleration = steeringForce / body.mass;
+            localAcceleration = localSteeringForce / mass;
+            acceleration = steeringForce / mass;
 
             return steeringForce;
         }

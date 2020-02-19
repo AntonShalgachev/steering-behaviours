@@ -98,7 +98,7 @@ namespace UnityPrototype
 
                 var normalForce = CalculateNormalForce(t);
                 var force = right * normalForce;
-                var acceleration = force / m_controller.body.mass;
+                var acceleration = force / m_mass;
                 velocity += acceleration * step;
                 velocity = Vector2.ClampMagnitude(velocity, maxSpeed);
                 pos += velocity * step;

@@ -48,6 +48,10 @@ namespace UnityPrototype
         protected Vector2 m_forward => m_controller.forward;
         protected Vector2 m_right => m_controller.right;
 
+        [ShowNativeProperty] protected float m_stoppingDistance => 0.5f * maxSpeed * maxSpeed / (maxBrakingForce / m_mass);
+
+        protected float m_mass => m_controller.mass;
+
         private Vector2 m_lastAppliedForce = Vector2.zero;
         private Vector2 m_lastAppliedForceComponents = Vector2.zero;
         [ShowNativeProperty] private float m_lastAppliedForceMagnitude => m_lastAppliedForce.magnitude;
@@ -105,10 +109,14 @@ namespace UnityPrototype
         public Vector2 CalculateForceForVelocity(Vector2 targetVelocity)
         {
             var targetSpeed = targetVelocity.magnitude;
-            var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity);
-
-            var normalForce = ClaculateNormalForce(targetAngle);
             var tangentForce = ClaculateTangentForce(targetSpeed);
+
+            var normalForce = 0.0f;
+            if (Mathf.Abs(targetSpeed) > Mathf.Epsilon)
+            {
+                var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity);
+                normalForce = ClaculateNormalForce(targetAngle);
+            }
 
             return new Vector2(normalForce, tangentForce);
         }
