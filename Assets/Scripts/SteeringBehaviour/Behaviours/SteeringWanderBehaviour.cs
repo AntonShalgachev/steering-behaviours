@@ -33,7 +33,7 @@ namespace UnityPrototype
 
         protected override Vector2? CalculateForceComponentsInternal(float dt)
         {
-            var normalForce = CalculateNormalForce(m_controller.time);
+            var normalForce = CalculateNormalForce(m_time);
             var tangentForce = m_keepMaxSpeed ? ClaculateTangentForce(maxSpeed) : 0.0f;
 
             return new Vector2(normalForce, tangentForce);
@@ -86,7 +86,7 @@ namespace UnityPrototype
             var step = Time.fixedDeltaTime;
 
             var pos = position;
-            var velocity = m_controller.forward * maxSpeed;
+            var velocity = m_forward * maxSpeed;
 
             var points = new List<Vector2>();
             points.Add(pos);

@@ -24,7 +24,7 @@ namespace UnityPrototype
         public float weight => m_weight;
 
         private SteeringBehaviourController m_cachedController = null;
-        protected SteeringBehaviourController m_controller
+        private SteeringBehaviourController m_controller
         {
             get
             {
@@ -51,6 +51,7 @@ namespace UnityPrototype
         [ShowNativeProperty] protected float m_stoppingDistance => 0.5f * maxSpeed * maxSpeed / (maxBrakingForce / m_mass);
 
         protected float m_mass => m_controller.mass;
+        protected float m_time => m_controller.time;
 
         private Vector2 m_lastAppliedForce = Vector2.zero;
         private Vector2 m_lastAppliedForceComponents = Vector2.zero;
