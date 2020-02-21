@@ -14,8 +14,10 @@ namespace UnityPrototype
             [Min(0.0f)] public float maxSpeedMultiplier = 1.0f;
             [Min(0.0f)] public float maxForceMultiplier = 1.0f;
 
-            [Min(0.0f)] public float velocityAngleAttenuation = 15.0f;
-            [Min(0.0f)] public float velocityMagnitudeAttenuation = 3.0f;
+            // [Min(0.0f)] public float velocityAngleAttenuation = 15.0f;
+            // [Min(0.0f)] public float velocityMagnitudeAttenuation = 3.0f;
+            [Min(0.0f)] public float tangentForceMultiplier = 1.0f;
+            [Min(0.0f)] public float normalForceMultiplier = 1.0f;
         }
 
         [SerializeField, Min(0.0f)] private float m_weight = 1.0f;
@@ -112,33 +114,39 @@ namespace UnityPrototype
         public Vector2 CalculateForceForVelocity(Vector2 targetVelocity)
         {
             var targetSpeed = targetVelocity.magnitude;
-            var tangentForce = ClaculateTangentForce(targetSpeed);
+            var tangentForce = CalculateTangentForce(targetSpeed);
 
             var normalForce = 0.0f;
             if (Mathf.Abs(targetSpeed) > Mathf.Epsilon)
             {
                 var targetAngle = Vector2.SignedAngle(Vector2.up, targetVelocity);
-                normalForce = ClaculateNormalForce(targetAngle);
+                normalForce = CalculateNormalForce(targetAngle);
             }
 
             return new Vector2(normalForce, tangentForce);
         }
 
-        public float ClaculateNormalForce(float targetAngle)
+        public float CalculateNormalForce(float targetAngle)
         {
             var angle = m_controller.angle;
             var deltaAngle = Mathf.DeltaAngle(angle, targetAngle);
-            var forceMultiplier = -Mathf.Clamp(deltaAngle / m_commonParameters.velocityAngleAttenuation, -1.0f, 1.0f);
-            return forceMultiplier * maxSteeringForce;
+            // var forceMultiplier = -Mathf.Clamp(deltaAngle / m_commonParameters.velocityAngleAttenuation, -1.0f, 1.0f);
+            // return forceMultiplier * maxSteeringForce;
+            var targetForce = -deltaAngle * m_commonParameters.normalForceMultiplier;
+            var force = Mathf.Clamp(targetForce, -maxSteeringForce, maxSteeringForce);
+            return force;
         }
 
-        public float ClaculateTangentForce(float targetSpeed)
+        public float CalculateTangentForce(float targetSpeed)
         {
             var speed = m_controller.speed;
             var deltaSpeed = targetSpeed - speed;
-            var forceMultiplier = Mathf.Clamp(deltaSpeed / m_commonParameters.velocityMagnitudeAttenuation, -1.0f, 1.0f);
-            var maxTangentForce = forceMultiplier > 0.0f ? maxAccelerationForce : maxBrakingForce;
-            return forceMultiplier * maxTangentForce;
+            // var forceMultiplier = Mathf.Clamp(deltaSpeed / m_commonParameters.velocityMagnitudeAttenuation, -1.0f, 1.0f);
+            // var maxTangentForce = forceMultiplier > 0.0f ? maxAccelerationForce : maxBrakingForce;
+            // return forceMultiplier * maxTangentForce;
+            var targetForce = -deltaSpeed * m_commonParameters.tangentForceMultiplier;
+            var force = Mathf.Clamp(targetForce, -maxBrakingForce, maxAccelerationForce);
+            return force;
         }
 
         protected virtual void DrawGizmos()

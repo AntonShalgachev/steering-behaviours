@@ -19,6 +19,9 @@ namespace UnityPrototype
 
         protected override Vector2? CalculateForceComponentsInternal(float dt)
         {
+            if (m_path.pointsCount <= 0)
+                return null;
+
             var isLast = m_pointIndex == m_path.pointsCount - 1;
             var targetIndex = Mathf.Clamp(m_pointIndex, 0, m_path.pointsCount - 1);
 

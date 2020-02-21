@@ -33,13 +33,13 @@ namespace UnityPrototype
 
         protected override Vector2? CalculateForceComponentsInternal(float dt)
         {
-            var normalForce = CalculateNormalForce(m_time);
-            var tangentForce = m_keepMaxSpeed ? ClaculateTangentForce(maxSpeed) : 0.0f;
+            var normalForce = CalculateWanderingNormalForce(m_time);
+            var tangentForce = m_keepMaxSpeed ? CalculateTangentForce(maxSpeed) : 0.0f;
 
             return new Vector2(normalForce, tangentForce);
         }
 
-        private float CalculateNormalForce(float t)
+        private float CalculateWanderingNormalForce(float t)
         {
             return Mathf.Clamp01(m_amplitude) * GetNoise(t) * maxSteeringForce;
         }
@@ -96,7 +96,7 @@ namespace UnityPrototype
                 var forward = velocity.normalized;
                 var right = forward.Rotate270();
 
-                var normalForce = CalculateNormalForce(t);
+                var normalForce = CalculateWanderingNormalForce(t);
                 var force = right * normalForce;
                 var acceleration = force / m_mass;
                 velocity += acceleration * step;
