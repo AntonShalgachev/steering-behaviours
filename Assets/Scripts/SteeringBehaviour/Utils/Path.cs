@@ -24,6 +24,8 @@ namespace UnityPrototype
 
         private PathPoint[] FindPathPoints()
         {
+            if (!gameObject.activeInHierarchy)
+                return new PathPoint[] { };
             return GetComponentsInChildren<PathPoint>();
         }
 
