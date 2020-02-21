@@ -4,17 +4,12 @@ namespace UnityPrototype
 {
     public static class SteeringBehaviourUtils
     {
-        public static Vector2 Seek(Vector2 targetPosition, ISteeringBehaviour agent)
-        {
-            return agent.CalculateForceForDirection((targetPosition - agent.position).normalized);
-        }
-
         public static Vector2 Flee(Vector2 threatPosition, ISteeringBehaviour agent)
         {
             return agent.CalculateForceForDirection((threatPosition - agent.position).normalized);
         }
 
-        public static Vector2 Arrival(Vector2 targetPosition, float targetRadius, float epsilonRadius, ISteeringBehaviour agent)
+        public static Vector2 Seek(Vector2 targetPosition, float targetRadius, float epsilonRadius, ISteeringBehaviour agent)
         {
             var dPos = targetPosition - agent.position;
 

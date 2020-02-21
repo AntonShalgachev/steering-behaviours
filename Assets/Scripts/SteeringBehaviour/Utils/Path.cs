@@ -19,6 +19,8 @@ namespace UnityPrototype
         }
 
         public int pointsCount => m_points.Length;
+        public PathPoint first => pointsCount > 0 ? m_points[0] : null;
+        public PathPoint last => pointsCount > 0 ? m_points[pointsCount - 1] : null;
 
         private PathPoint[] FindPathPoints()
         {
@@ -30,11 +32,22 @@ namespace UnityPrototype
             return m_points[index].transform.position;
         }
 
-        private void OnDrawGizmos()
+        public void DrawCurveGizmos(float lastPointRadius)
         {
+            var points = FindPathPoints();
+            if (points.Length <= 0)
+                return;
+
+            var pointPositions = FindPathPoints().Select((PathPoint point) => (Vector2)point.transform.position);
+
             Gizmos.color = Color.red;
-            var points = FindPathPoints().Select((PathPoint point) => (Vector2)point.transform.position);
-            GizmosHelper.DrawCurve(points);
+            GizmosHelper.DrawCurve(pointPositions);
+
+            if (lastPointRadius > 0.0f)
+            {
+                Gizmos.color = Color.green;
+                GizmosHelper.DrawCircle(points.Last().transform.position, lastPointRadius);
+            }
         }
     }
 }

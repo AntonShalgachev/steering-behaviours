@@ -48,7 +48,8 @@ namespace UnityPrototype
         protected Vector2 m_forward => m_controller.forward;
         protected Vector2 m_right => m_controller.right;
 
-        [ShowNativeProperty] protected float m_stoppingDistance => 0.5f * maxSpeed * maxSpeed / (maxBrakingForce / m_mass);
+        [ShowNativeProperty] protected float m_maxStoppingDistance => 0.5f * maxSpeed * maxSpeed / (maxBrakingForce / m_mass);
+        [ShowNativeProperty] protected float m_currentStoppingDistance => 0.5f * m_controller.speed * m_controller.speed / (maxBrakingForce / m_mass);
 
         protected float m_mass => m_controller.mass;
         protected float m_time => m_controller.time;
