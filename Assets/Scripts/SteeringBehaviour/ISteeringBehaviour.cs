@@ -155,6 +155,9 @@ namespace UnityPrototype
 
         private void OnDrawGizmos()
         {
+            if (!enabled)
+                return;
+
             DrawGizmos();
         }
     }
