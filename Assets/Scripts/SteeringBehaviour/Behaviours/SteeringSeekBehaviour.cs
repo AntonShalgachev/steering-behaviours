@@ -14,7 +14,7 @@ namespace UnityPrototype
 
         private float m_brakingRadius => m_maxStoppingDistance * m_brakingRadiusMultiplier;
 
-        protected override Vector2? CalculateForceComponentsInternal(float dt)
+        protected override Vector2? CalculateForceComponentsInternal()
         {
             if (m_target == null)
                 return null;

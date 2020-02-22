@@ -93,10 +93,10 @@ namespace UnityPrototype
 
         private void FixedUpdate()
         {
-            Step(timeStep);
+            Step();
         }
 
-        private void Step(float dt)
+        private void Step()
         {
             var newForward = velocity.normalized;
             var dot = Vector2.Dot(newForward, m_runtimeForward);
@@ -112,20 +112,20 @@ namespace UnityPrototype
 
             m_lastAppliedSpeedControlForce = speedControlForce;
 
-            var steeringForce = CalculateSteeringForce(dt);
+            var steeringForce = CalculateSteeringForce();
 
             var totalForce = steeringForce + speedControlForce;
 
             body.AddForce(totalForce);
         }
 
-        private Vector2 CalculateSteeringForce(float dt)
+        private Vector2 CalculateSteeringForce()
         {
             var localSteeringForce = Vector2.zero;
             var weightsSum = 0.0f;
             foreach (var behaviour in m_behaviours)
             {
-                var localForce = behaviour.CalculateLocalForce(dt);
+                var localForce = behaviour.CalculateLocalForce();
                 if (localForce == null)
                     continue;
 
@@ -142,7 +142,7 @@ namespace UnityPrototype
             else
                 Debug.Assert(Vector2.Distance(localSteeringForce, Vector2.zero) < Mathf.Epsilon);
 
-            localSteeringForce = ClampForceComponents(localSteeringForce, dt);
+            localSteeringForce = ClampForceComponents(localSteeringForce);
             m_lastAppliedForce = localSteeringForce;
 
             var steeringForce = CalculateForceFromComponents(localSteeringForce);
@@ -153,10 +153,10 @@ namespace UnityPrototype
             return steeringForce;
         }
 
-        private Vector2 ClampForceComponents(Vector2 steeringForceComponents, float dt)
+        private Vector2 ClampForceComponents(Vector2 steeringForceComponents)
         {
-            var forceToMinSpeed = (0.0f - speed) * mass / dt;
-            var forceToMaxSpeed = (maxSpeed - speed) * mass / dt;
+            var forceToMinSpeed = (0.0f - speed) * mass / timeStep;
+            var forceToMaxSpeed = (maxSpeed - speed) * mass / timeStep;
 
             var minTangentForce = Mathf.Max(-maxBrakingForce, forceToMinSpeed);
             var maxTangentForce = Mathf.Min(maxAccelerationForce, forceToMaxSpeed);

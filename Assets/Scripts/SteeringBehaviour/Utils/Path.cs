@@ -34,7 +34,7 @@ namespace UnityPrototype
             return m_points[index].transform.position;
         }
 
-        public void DrawCurveGizmos(float lastPointRadius)
+        public void DrawCurveGizmos(float pointRadius, float lastPointArrivalRadius)
         {
             var points = FindPathPoints();
             if (points.Length <= 0)
@@ -45,10 +45,14 @@ namespace UnityPrototype
             Gizmos.color = Color.red;
             GizmosHelper.DrawCurve(pointPositions);
 
-            if (lastPointRadius > 0.0f)
+            Gizmos.color = Color.blue;
+            foreach (var point in pointPositions)
+                GizmosHelper.DrawCircle(point, pointRadius);
+
+            if (lastPointArrivalRadius > 0.0f)
             {
                 Gizmos.color = Color.green;
-                GizmosHelper.DrawCircle(points.Last().transform.position, lastPointRadius);
+                GizmosHelper.DrawCircle(points.Last().transform.position, lastPointArrivalRadius);
             }
         }
     }

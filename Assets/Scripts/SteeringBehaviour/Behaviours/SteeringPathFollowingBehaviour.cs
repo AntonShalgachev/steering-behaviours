@@ -17,7 +17,7 @@ namespace UnityPrototype
 
         private int m_pointIndex = 0;
 
-        protected override Vector2? CalculateForceComponentsInternal(float dt)
+        protected override Vector2? CalculateForceComponentsInternal()
         {
             if (m_path.pointsCount <= 0)
                 return null;
@@ -44,10 +44,12 @@ namespace UnityPrototype
 
         protected override void DrawGizmos()
         {
+            base.DrawGizmos();
+
             if (m_path == null)
                 return;
 
-            m_path.DrawCurveGizmos(m_slowNearLastPoint ? m_brakingRadius : 0.0f);
+            m_path.DrawCurveGizmos(m_pointRadius, m_slowNearLastPoint ? m_brakingRadius : 0.0f);
         }
     }
 }

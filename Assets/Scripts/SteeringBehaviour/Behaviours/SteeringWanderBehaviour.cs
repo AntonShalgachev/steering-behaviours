@@ -31,7 +31,7 @@ namespace UnityPrototype
         [SerializeField] private float m_seed = 0.0f;
         [SerializeField] private bool m_keepMaxSpeed = false;
 
-        protected override Vector2? CalculateForceComponentsInternal(float dt)
+        protected override Vector2? CalculateForceComponentsInternal()
         {
             var normalForce = CalculateWanderingNormalForce(m_time);
             var tangentForce = m_keepMaxSpeed ? CalculateTangentForce(maxSpeed) : 0.0f;

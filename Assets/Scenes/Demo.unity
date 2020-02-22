@@ -134,7 +134,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 68282064}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6e6663c661679e469fa154b1aa049bf, type: 3}
   m_Name: 
@@ -143,8 +143,8 @@ MonoBehaviour:
   m_commonParameters:
     maxSpeedMultiplier: 1
     maxForceMultiplier: 1
-    tangentForceMultiplier: 100
-    normalForceMultiplier: 6.66
+    tangentForceMultiplier: 200
+    normalForceMultiplier: 3
   m_target: {fileID: 645380803}
   m_slowNearTarget: 1
   m_brakingRadiusMultiplier: 1.1
@@ -217,7 +217,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145988160}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.25, y: -3.97, z: 0}
+  m_LocalPosition: {x: 20.68, y: -8.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1864721275}
@@ -661,7 +661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1864721275
 Transform:
   m_ObjectHideFlags: 0
@@ -708,7 +708,23 @@ PrefabInstance:
       objectReference: {fileID: 1864721276}
     - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
+      propertyPath: m_commonParameters.tangentForceMultiplier
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
+      propertyPath: m_commonParameters.normalForceMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
+      propertyPath: m_commonParameters.maxSpeedMultiplier
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
+      propertyPath: m_commonParameters.maxForceMultiplier
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501985, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
@@ -770,6 +786,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
