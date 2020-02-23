@@ -75,12 +75,17 @@ namespace UnityPrototype
 
         private bool m_initialized = false;
 
+        private void Awake()
+        {
+            TryInitialize();
+        }
+
         private void TryInitialize()
         {
             if (m_initialized)
                 return;
 
-            m_runtimeForward = Vector2.up.Rotate(m_initialDirectionAngle);
+            m_runtimeForward = m_initialForward;
 
             m_initialized = true;
         }
