@@ -42,12 +42,16 @@ namespace UnityPrototype
             }
         }
 
-        public static void DrawCurve(IEnumerable<Vector2> points, float pointSize = -1.0f, bool wireframePoint = false)
+        public static void DrawCurve(IEnumerable<Vector2> points, float pointSize = -1.0f, bool wireframePoint = false, bool loop = false)
         {
+            Vector2? firstPoint = null;
             Vector2? prevPoint = null;
 
             foreach (var point in points)
             {
+                if (!firstPoint.HasValue)
+                    firstPoint = point;
+
                 if (prevPoint.HasValue)
                     Gizmos.DrawLine(prevPoint.Value, point);
 
@@ -61,6 +65,9 @@ namespace UnityPrototype
 
                 prevPoint = point;
             }
+
+            if (loop && prevPoint.HasValue && firstPoint.HasValue)
+                Gizmos.DrawLine(prevPoint.Value, firstPoint.Value);
         }
 
         public static float ScreenSizeToWorldSize(float size)

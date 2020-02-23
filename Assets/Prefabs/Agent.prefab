@@ -259,6 +259,7 @@ MonoBehaviour:
     normalForceSlope: 1
   m_path: {fileID: 0}
   m_pointRadius: 1
+  m_loop: 1
   m_slowNearLastPoint: 1
   m_brakingRadiusMultiplier: 1.2
   m_epsilonRadius: 0.1
