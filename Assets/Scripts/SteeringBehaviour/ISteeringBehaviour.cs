@@ -9,19 +9,17 @@ namespace UnityPrototype
     public abstract class ISteeringBehaviour : MonoBehaviour
     {
         [System.Serializable]
-        public class CommonBehaviourParameters
+        private class BehaviourMultipliers
         {
-            [Min(0.0f)] public float maxSpeedMultiplier = 1.0f;
-            [Min(0.0f)] public float maxForceMultiplier = 1.0f;
+            [Min(0.0f)] public float maxSpeed = 1.0f;
+            [Min(0.0f)] public float maxForce = 1.0f;
 
-            // [Min(0.0f)] public float velocityAngleAttenuation = 15.0f;
-            // [Min(0.0f)] public float velocityMagnitudeAttenuation = 3.0f;
-            [Min(0.0f)] public float tangentForceMultiplier = 1.0f;
-            [Min(0.0f)] public float normalForceMultiplier = 1.0f;
+            [Min(0.0f)] public float tangentForceSlope = 1.0f;
+            [Min(0.0f)] public float normalForceSlope = 1.0f;
         }
 
         [SerializeField, Min(0.0f)] private float m_weight = 1.0f;
-        [SerializeField] private CommonBehaviourParameters m_commonParameters = new CommonBehaviourParameters();
+        [SerializeField] private BehaviourMultipliers m_multipliers = new BehaviourMultipliers();
 
         public float weight => m_weight;
 
@@ -43,10 +41,12 @@ namespace UnityPrototype
 
         public Vector2 position => m_controller.position;
         public Vector2 velocity => m_controller.velocity;
-        [ShowNativeProperty] public float maxSpeed => m_controller.maxSpeed * m_commonParameters.maxSpeedMultiplier;
-        [ShowNativeProperty] public float maxSteeringForce => m_controller.maxSteeringForce * m_commonParameters.maxForceMultiplier;
-        [ShowNativeProperty] public float maxAccelerationForce => m_controller.maxAccelerationForce * m_commonParameters.maxForceMultiplier;
-        [ShowNativeProperty] public float maxBrakingForce => m_controller.maxBrakingForce * m_commonParameters.maxForceMultiplier;
+        [ShowNativeProperty] public float maxSpeed => m_controller.maxSpeed * m_multipliers.maxSpeed;
+        [ShowNativeProperty] public float maxSteeringForce => m_controller.maxSteeringForce * m_multipliers.maxForce;
+        [ShowNativeProperty] public float maxAccelerationForce => m_controller.maxAccelerationForce * m_multipliers.maxForce;
+        [ShowNativeProperty] public float maxBrakingForce => m_controller.maxBrakingForce * m_multipliers.maxForce;
+        [ShowNativeProperty] public float tangentForceSlope => m_controller.tangentForceSlope * m_multipliers.tangentForceSlope;
+        [ShowNativeProperty] public float normalForceSlope => m_controller.normalForceSlope * m_multipliers.normalForceSlope;
         protected Vector2 m_forward => m_controller.forward;
         protected Vector2 m_right => m_controller.right;
 
@@ -157,22 +157,19 @@ namespace UnityPrototype
         {
             var angle = m_controller.angle;
             var deltaAngle = Mathf.DeltaAngle(angle, targetAngle);
-            return CalculateForceFromDelta(deltaAngle, -m_commonParameters.normalForceMultiplier);
+            return CalculateForceFromDelta(deltaAngle, -normalForceSlope);
         }
 
         public float CalculateTangentForce(float targetSpeed)
         {
             var speed = m_controller.speed;
             var deltaSpeed = targetSpeed - speed;
-            return CalculateForceFromDelta(deltaSpeed, m_commonParameters.tangentForceMultiplier);
+            return CalculateForceFromDelta(deltaSpeed, tangentForceSlope);
         }
 
-        private float CalculateForceFromDelta(float delta, float multiplier)
+        private float CalculateForceFromDelta(float delta, float slope)
         {
-            // var power = 1.0f;
-            // var powDelta = Mathf.Sign(delta) * Mathf.Pow(Mathf.Abs(delta), power);
-            // return powDelta * multiplier;
-            return delta * multiplier;
+            return delta * slope;
         }
 
         protected virtual void DrawGizmos()

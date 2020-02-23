@@ -14,19 +14,29 @@ namespace UnityPrototype
 
         [SerializeField, Range(-180.0f, 180.0f)] private float m_initialDirectionAngle = 0.0f;
 
-        [Header("Forces")]
+        [Header("Max forces")]
+        [Space]
         [SerializeField] private float m_maxAccelerationForce = 10.0f;
         [SerializeField] private float m_maxBrakingForce = 10.0f;
         [SerializeField] private float m_maxSteeringForce = 10.0f;
-        [SerializeField] private float m_speedForMaxSteeringForce = 10.0f;
 
-        [Header("Speed control")]
+        [Header("Force slopes")]
+        [Space]
+        [SerializeField] private float m_tangentForceSlope = 200.0f;
+        [SerializeField] private float m_normalForceSlope = 3.0f;
+
+        [Header("Other")]
+        [Space]
+        [SerializeField] private float m_speedForMaxSteeringForce = 10.0f;
         [SerializeField] private float m_speedControlRate = 1.0f;
 
         public float maxSpeed => m_maxSpeed;
         [ShowNativeProperty] public float maxAccelerationForce => m_maxAccelerationForce;
         public float maxBrakingForce => m_maxBrakingForce;
         [ShowNativeProperty] public float maxSteeringForce => Application.isPlaying ? Mathf.Lerp(0.0f, m_maxSteeringForce, Mathf.InverseLerp(0.0f, m_speedForMaxSteeringForce, speed)) : m_maxSteeringForce;
+
+        public float tangentForceSlope => m_tangentForceSlope;
+        public float normalForceSlope => m_normalForceSlope;
 
         private Rigidbody2D m_cachedBody = null;
         public Rigidbody2D body

@@ -121,34 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &68282064 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5408048997544501985, guid: 74f0f767da878194695b49d0c1ec726d,
-    type: 3}
-  m_PrefabInstance: {fileID: 5408048999642368640}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &68282065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 68282064}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6e6663c661679e469fa154b1aa049bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_weight: 1
-  m_commonParameters:
-    maxSpeedMultiplier: 1
-    maxForceMultiplier: 1
-    tangentForceMultiplier: 200
-    normalForceMultiplier: 3
-  m_target: {fileID: 645380803}
-  m_slowNearTarget: 1
-  m_brakingRadiusMultiplier: 1.1
-  m_epsilonRadius: 0.1
 --- !u!1 &74427943
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,26 +678,6 @@ PrefabInstance:
       propertyPath: m_path
       value: 
       objectReference: {fileID: 1864721276}
-    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
-      propertyPath: m_commonParameters.tangentForceMultiplier
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
-      propertyPath: m_commonParameters.normalForceMultiplier
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
-      propertyPath: m_commonParameters.maxSpeedMultiplier
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 68282065, guid: 74f0f767da878194695b49d0c1ec726d, type: 3}
-      propertyPath: m_commonParameters.maxForceMultiplier
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 5408048997544501985, guid: 74f0f767da878194695b49d0c1ec726d,
         type: 3}
       propertyPath: m_Name

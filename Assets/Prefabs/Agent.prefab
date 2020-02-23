@@ -230,11 +230,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a10258ba3fa2c42be9ada224a7e5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxSpeed: 10
+  m_maxSpeed: 5
   m_initialDirectionAngle: -90
   m_maxAccelerationForce: 10
   m_maxBrakingForce: 50
   m_maxSteeringForce: 100
+  m_tangentForceSlope: 200
+  m_normalForceSlope: 3
   m_speedForMaxSteeringForce: 5
   m_speedControlRate: 30
 --- !u!114 &68282065
@@ -250,11 +252,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_weight: 1
-  m_commonParameters:
-    maxSpeedMultiplier: 1
-    maxForceMultiplier: 1
-    velocityAngleAttenuation: 15
-    velocityMagnitudeAttenuation: 3
+  m_multipliers:
+    maxSpeed: 1
+    maxForce: 1
+    tangentForceSlope: 1
+    normalForceSlope: 1
   m_path: {fileID: 0}
   m_pointRadius: 1
   m_slowNearLastPoint: 1
