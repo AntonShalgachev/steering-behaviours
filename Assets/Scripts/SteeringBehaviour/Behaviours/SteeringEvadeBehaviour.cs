@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityPrototype
 {
-    public class SteeringPursuitBehaviour : ISteeringBehaviour
+    public class SteeringEvadeBehaviour : ISteeringBehaviour
     {
         [SerializeField] private SteeringBehaviourController m_target = null;
         [SerializeField] private float m_predictionTime = 0.0f;
@@ -13,7 +13,7 @@ namespace UnityPrototype
 
         protected override Vector2? CalculateForceComponentsInternal()
         {
-            return SteeringBehaviourUtils.Seek(m_targetPosition, 0.0f, 0.0f, this);
+            return SteeringBehaviourUtils.Flee(m_targetPosition, this);
         }
 
         protected override void DrawGizmos()

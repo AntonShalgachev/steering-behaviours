@@ -6,7 +6,7 @@ namespace UnityPrototype
     {
         public static Vector2 Flee(Vector2 threatPosition, ISteeringBehaviour agent)
         {
-            return agent.CalculateForceForDirection((threatPosition - agent.position).normalized);
+            return agent.CalculateForceForDirection((agent.position - threatPosition).normalized);
         }
 
         public static Vector2 Seek(Vector2 targetPosition, float targetRadius, float epsilonRadius, ISteeringBehaviour agent)
