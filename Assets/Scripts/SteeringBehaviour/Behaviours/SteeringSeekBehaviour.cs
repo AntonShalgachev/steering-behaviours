@@ -19,6 +19,7 @@ namespace UnityPrototype
             if (m_target == null)
                 return null;
 
+            activation = 1.0f;
             var brakingRadius = m_slowNearTarget ? m_brakingRadius : 0.0f;
             var epsilonRadius = m_slowNearTarget ? m_epsilonRadius : 0.0f;
             return SteeringBehaviourUtils.Seek(m_target.position, brakingRadius, epsilonRadius, this);

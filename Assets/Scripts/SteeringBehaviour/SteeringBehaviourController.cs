@@ -144,10 +144,8 @@ namespace UnityPrototype
                 if (localForce == null)
                     continue;
 
-                Debug.Assert(behaviour.weight >= 0.0f);
-
-                localSteeringForce += localForce.Value * behaviour.weight;
-                weightsSum += behaviour.weight;
+                localSteeringForce += localForce.Value * behaviour.weight * behaviour.activation;
+                weightsSum += behaviour.weight * behaviour.activation;
             }
 
             Debug.Assert(weightsSum >= 0.0f);

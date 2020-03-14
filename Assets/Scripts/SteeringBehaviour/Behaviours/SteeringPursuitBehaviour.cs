@@ -13,6 +13,7 @@ namespace UnityPrototype
 
         protected override Vector2? CalculateForceComponentsInternal()
         {
+            activation = 1.0f;
             return SteeringBehaviourUtils.Seek(m_targetPosition, 0.0f, 0.0f, this);
         }
 

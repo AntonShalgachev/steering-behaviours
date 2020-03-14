@@ -24,10 +24,13 @@ namespace UnityPrototype
         {
             // beware, this code stinks
 
+            activation = 0.0f;
             targetDirections.Clear();
 
-            float? minDistance = null;
-            var forceForClosestThreat = 0.0f;
+            // float? minDistance = null;
+            // var forceForClosestThreat = 0.0f;
+
+            (float force, float distance, float weight)? targetData = null;
 
             foreach (var obstacle in m_sensor.touchingObjects)
             {
@@ -35,20 +38,18 @@ namespace UnityPrototype
                 if (!data.HasValue)
                     continue;
 
-                var force = data.Value.force;
-                var distance = data.Value.distance;
-
-                if (!minDistance.HasValue || minDistance.Value > distance)
-                {
-                    minDistance = distance;
-                    forceForClosestThreat = force;
-                }
+                if (!targetData.HasValue || targetData.Value.distance > data.Value.distance)
+                    targetData = data;
             }
 
-            return new Vector2(forceForClosestThreat, 0.0f);
+            if (!targetData.HasValue)
+                return null;
+
+            activation = targetData.Value.weight;
+            return new Vector2(targetData.Value.force, 0.0f);
         }
 
-        private (float force, float distance)? CalculateForceForObstacle(CircleCollider2D obstacle)
+        private (float force, float distance, float weight)? CalculateForceForObstacle(CircleCollider2D obstacle)
         {
             if (obstacle == null)
                 return null;
@@ -87,7 +88,7 @@ namespace UnityPrototype
 
             var force = CalculateNormalForce(targetAngle) * weight;
 
-            return (force, distanceToBound);
+            return (force, distanceToBound, weight);
         }
 
         protected override void DrawGizmos()

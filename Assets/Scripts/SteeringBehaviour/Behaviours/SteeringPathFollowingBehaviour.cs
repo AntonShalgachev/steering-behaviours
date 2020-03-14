@@ -25,6 +25,7 @@ namespace UnityPrototype
             if (m_path.pointsCount <= 0)
                 return null;
 
+            activation = 1.0f;
             var isLast = m_pointIndex == m_path.pointsCount - 1;
             var canIncrementIndex = m_loop || !isLast;
 

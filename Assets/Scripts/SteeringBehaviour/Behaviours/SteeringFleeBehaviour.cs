@@ -13,6 +13,7 @@ namespace UnityPrototype
             if (m_threat == null)
                 return null;
 
+            activation = 1.0f;
             return SteeringBehaviourUtils.Flee(m_threat.position, this);
         }
     }

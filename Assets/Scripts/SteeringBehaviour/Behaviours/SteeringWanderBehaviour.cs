@@ -33,6 +33,7 @@ namespace UnityPrototype
 
         protected override Vector2? CalculateForceComponentsInternal()
         {
+            activation = 1.0f;
             var normalForce = CalculateWanderingNormalForce(m_time);
             var tangentForce = m_keepMaxSpeed ? CalculateTangentForce(maxSpeed) : 0.0f;
 

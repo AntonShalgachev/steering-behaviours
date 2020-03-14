@@ -22,6 +22,7 @@ namespace UnityPrototype
         [SerializeField] private BehaviourMultipliers m_multipliers = new BehaviourMultipliers();
 
         public float weight => m_weight;
+        [ShowNativeProperty] public float activation { get; protected set; } = 1.0f;
 
         private SteeringBehaviourController m_cachedController = null;
         private SteeringBehaviourController m_controller
@@ -92,6 +93,7 @@ namespace UnityPrototype
 
         public Vector2? CalculateLocalForce()
         {
+            activation = 0.0f;
             var force = CalculateForceComponentsInternal();
 
             m_lastAppliedForceComponents = force.GetValueOrDefault(Vector2.zero) * m_weight;
