@@ -41,6 +41,7 @@ namespace UnityPrototype
 
         public Vector2 position => m_controller.position;
         public Vector2 velocity => m_controller.velocity;
+        public float angle => m_controller.angle;
         [ShowNativeProperty] public float maxSpeed => m_controller.maxSpeed * m_multipliers.maxSpeed;
         [ShowNativeProperty] public float maxSteeringForce => m_controller.maxSteeringForce * m_multipliers.maxForce;
         [ShowNativeProperty] public float maxAccelerationForce => m_controller.maxAccelerationForce * m_multipliers.maxForce;
