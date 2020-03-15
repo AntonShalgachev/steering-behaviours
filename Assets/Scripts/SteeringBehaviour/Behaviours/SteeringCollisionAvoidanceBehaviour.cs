@@ -2,18 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using Gamelogic.Extensions;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace UnityPrototype
 {
     public class SteeringCollisionAvoidanceBehaviour : ISteeringBehaviour
     {
+        private struct ObstacleData
+        {
+            public Vector2 position;
+            public float force;
+            public float distance;
+            public float weight;
+            public Vector2 direction;
+        }
+
         [SerializeField] private float m_minDistance = 1.0f;
         [SerializeField] private float m_maxDistance = 5.0f;
+
         [SerializeField] private float m_hullRadius = 1.0f;
+        [SerializeField, Min(0.0f)] private float m_safetyDistance = 1.0f;
 
         private Sensor m_sensor = null;
 
-        private List<Vector2> targetDirections = new List<Vector2>();
+        private ObstacleData? m_currentTargetData = null;
 
         protected override void Initialize()
         {
@@ -25,12 +37,8 @@ namespace UnityPrototype
             // beware, this code stinks
 
             activation = 0.0f;
-            targetDirections.Clear();
 
-            // float? minDistance = null;
-            // var forceForClosestThreat = 0.0f;
-
-            (float force, float distance, float weight)? targetData = null;
+            ObstacleData? targetData = null;
 
             foreach (var obstacle in m_sensor.touchingObjects)
             {
@@ -42,6 +50,8 @@ namespace UnityPrototype
                     targetData = data;
             }
 
+            m_currentTargetData = targetData;
+
             if (!targetData.HasValue)
                 return null;
 
@@ -49,7 +59,7 @@ namespace UnityPrototype
             return new Vector2(targetData.Value.force, 0.0f);
         }
 
-        private (float force, float distance, float weight)? CalculateForceForObstacle(CircleCollider2D obstacle)
+        private ObstacleData? CalculateForceForObstacle(CircleCollider2D obstacle)
         {
             if (obstacle == null)
                 return null;
@@ -58,37 +68,52 @@ namespace UnityPrototype
             var scale = obstacle.transform.lossyScale;
             var radius = obstacle.radius * Mathf.Max(scale.x, scale.y);
             var radiusWithHull = radius + m_hullRadius;
+            var radiusWithSafety = radius + m_safetyDistance;
 
             var toCenter = obstaclePosition - position;
             var distanceToCenter = toCenter.magnitude;
-
-            if (distanceToCenter < radiusWithHull)
-            {
-                Debug.LogWarning("Agent is inside the obstacle, skipping");
-                return null;
-            }
-
             var distanceToBound = distanceToCenter - radius;
             var weight = Mathf.InverseLerp(m_maxDistance, m_minDistance, distanceToBound);
 
-            var deltaAngleFromCenter = Mathf.Asin(radiusWithHull / distanceToCenter) * Mathf.Rad2Deg;
             var deltaAngleToCenter = Vector2.SignedAngle(m_forward, toCenter);
+            var directionMultiplier = -Mathf.Sign(deltaAngleToCenter);
 
+            var targetDirection = Vector2.zero;
+
+            if (distanceToCenter < radiusWithHull)
+            {
+                return new ObstacleData
+                {
+                    position = obstaclePosition,
+                    force = -maxSteeringForce * directionMultiplier,
+                    distance = distanceToBound,
+                    weight = weight,
+                    direction = targetDirection,
+                };
+            }
+
+            var dAngle = Mathf.Atan(m_safetyDistance / distanceToCenter);
+            var deltaAngleFromCenter = Mathf.Asin(radiusWithHull / distanceToCenter) + dAngle;
+            deltaAngleFromCenter *= Mathf.Rad2Deg;
             if (Mathf.Abs(deltaAngleToCenter) > deltaAngleFromCenter)
                 return null;
-
-            var directionMultiplier = -Mathf.Sign(deltaAngleToCenter);
 
             var targetAngle = angle + deltaAngleToCenter + directionMultiplier * deltaAngleFromCenter;
 
 #if DEBUG
-            var targetDirection = Vector2.up.Rotate(targetAngle) * Mathf.Sqrt(distanceToCenter * distanceToCenter - radius * radius);
-            targetDirections.Add(targetDirection);
+            targetDirection = Vector2.up.Rotate(targetAngle) * Mathf.Sqrt(distanceToCenter * distanceToCenter - radiusWithHull * radiusWithHull);
 #endif
 
             var force = CalculateNormalForce(targetAngle) * weight;
 
-            return (force, distanceToBound, weight);
+            return new ObstacleData
+            {
+                position = obstaclePosition,
+                force = force,
+                distance = distanceToBound,
+                weight = weight,
+                direction = targetDirection,
+            };
         }
 
         protected override void DrawGizmos()
@@ -101,19 +126,17 @@ namespace UnityPrototype
 
             Gizmos.color = Color.black;
             GizmosHelper.DrawCircle(position, m_hullRadius);
+            GizmosHelper.DrawCircle(position, m_hullRadius + m_safetyDistance);
 
-            if (m_sensor != null)
+            if (m_currentTargetData.HasValue)
             {
-                Gizmos.color = Color.blue;
-                foreach (var obstacle in m_sensor.touchingObjects)
-                    Gizmos.DrawLine(position, obstacle.transform.position);
-            }
+                var data = m_currentTargetData.Value;
 
-            if (targetDirections != null)
-            {
                 Gizmos.color = Color.white;
-                foreach (var direction in targetDirections)
-                    GizmosHelper.DrawVector(position, direction);
+                GizmosHelper.DrawVector(position, data.direction);
+
+                Gizmos.color = Color.blue;
+                Gizmos.DrawLine(position, data.position);
             }
         }
     }
