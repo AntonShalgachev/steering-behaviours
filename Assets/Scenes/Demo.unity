@@ -581,7 +581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_prefab: {fileID: 8640374003718257262, guid: 0686fd3516ad4aa47bff065967eb000b,
     type: 3}
-  m_radius: 9.13
+  m_radii: {x: 14, y: 9}
 --- !u!1 &1630464164
 GameObject:
   m_ObjectHideFlags: 0

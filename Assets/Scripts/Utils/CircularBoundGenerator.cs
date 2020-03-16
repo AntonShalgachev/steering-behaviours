@@ -8,13 +8,14 @@ namespace UnityPrototype
     public class CircularBoundGenerator : MonoBehaviour
     {
         [SerializeField] private CircleCollider2D m_prefab = null;
-        [SerializeField] private float m_radius = 5.0f;
+        [SerializeField] private Vector2 m_radii = new Vector2(7.0f, 5.0f);
 
         private void Awake()
         {
             var scale = m_prefab.transform.lossyScale;
             var r = m_prefab.radius * Mathf.Max(scale.x, scale.y);
-            var deltaAngleRad = Mathf.Acos(1.0f - 2.0f * r * r / m_radius / m_radius);
+            var meanRadius = 0.5f * (m_radii.x + m_radii.y);
+            var deltaAngleRad = Mathf.Acos(1.0f - 2.0f * r * r / meanRadius / meanRadius);
 
             var obstaclesCount = Mathf.CeilToInt(2.0f * Mathf.PI / deltaAngleRad);
 
@@ -24,7 +25,7 @@ namespace UnityPrototype
             for (var i = 0; i < obstaclesCount; i++)
             {
                 var dir = prevDir.Rotate(deltaAngle);
-                var pos = dir * m_radius;
+                var pos = dir * m_radii;
 
                 Instantiate(m_prefab, pos, Quaternion.identity, transform);
 
@@ -35,7 +36,7 @@ namespace UnityPrototype
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            GizmosHelper.DrawCircle(transform.position, m_radius);
+            GizmosHelper.DrawEllipse(transform.position, m_radii);
         }
     }
 }
