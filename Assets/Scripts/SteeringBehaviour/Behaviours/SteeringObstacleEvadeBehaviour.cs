@@ -6,16 +6,22 @@ namespace UnityPrototype
 {
     public class SteeringObstacleEvadeBehaviour : ISteeringBehaviour
     {
+        [SerializeField] private float m_sensorRange = 5.0f;
+        [SerializeField, Layer] private int m_sensorLayer = 0;
+
         private Sensor m_sensor = null;
 
         protected override void Initialize()
         {
-            m_sensor = GetComponentInChildren<PerceptionSensor>()?.GetComponent<Sensor>();
+            m_sensor = m_controller.AddSensor(m_sensorRange, m_sensorLayer);
         }
 
         protected override Vector2? CalculateForceComponentsInternal()
         {
             activation = 0.0f;
+
+            if (m_sensor == null)
+                return null;
 
             var visibleObstaclesCount = m_sensor.touchingObjects.Count;
 

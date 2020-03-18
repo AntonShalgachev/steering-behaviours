@@ -30,6 +30,11 @@ namespace UnityPrototype
         [SerializeField] private float m_speedForMaxSteeringForce = 10.0f;
         [SerializeField] private float m_speedControlRate = 1.0f;
 
+        [Header("Sensors")]
+        [Space]
+        [SerializeField] private Sensor m_sensorPrefab = null;
+        [SerializeField] private Transform m_sensorsRoot = null;
+
         public float maxSpeed => m_maxSpeed;
         [ShowNativeProperty] public float maxAccelerationForce => m_maxAccelerationForce;
         public float maxBrakingForce => m_maxBrakingForce;
@@ -57,7 +62,7 @@ namespace UnityPrototype
         public Vector2 acceleration { get; private set; } = Vector2.zero;
         [ShowNativeProperty] public float speed => Vector2.Dot(velocity, forward);
 
-        private Vector2 m_initialForward => Vector2.up.Rotate(m_initialDirectionAngle);
+        private Vector2 m_initialForward => GetDirectionFromAngle(m_initialDirectionAngle);
         private Vector2 m_runtimeForward = Vector2.up;
 
         public Vector2 forward => Application.isPlaying ? m_runtimeForward : m_initialForward;
@@ -88,6 +93,16 @@ namespace UnityPrototype
             m_runtimeForward = m_initialForward;
 
             m_initialized = true;
+        }
+
+        public void SetDirection(float angle)
+        {
+            m_runtimeForward = GetDirectionFromAngle(angle);
+        }
+
+        private Vector2 GetDirectionFromAngle(float angle)
+        {
+            return Vector2.up.Rotate(angle);
         }
 
         public int AddBehaviour(ISteeringBehaviour behaviour)
@@ -188,6 +203,14 @@ namespace UnityPrototype
             var tangentForce = steeringForceComponents.y;
 
             return normalForce * right + tangentForce * forward;
+        }
+
+        public Sensor AddSensor(float radius, int layer)
+        {
+            var sensor = Instantiate(m_sensorPrefab, transform.position, Quaternion.identity, m_sensorsRoot);
+            sensor.gameObject.layer = layer;
+
+            return sensor;
         }
     }
 }

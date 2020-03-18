@@ -25,7 +25,7 @@ namespace UnityPrototype
         [ShowNativeProperty] public float activation { get; protected set; } = 1.0f;
 
         private SteeringBehaviourController m_cachedController = null;
-        private SteeringBehaviourController m_controller
+        protected SteeringBehaviourController m_controller
         {
             get
             {

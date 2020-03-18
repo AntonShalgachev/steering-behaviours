@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2303721155586968207}
   - component: {fileID: 3018027000865281231}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5631233794721774814}
   - component: {fileID: 4030962485543773802}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,6 +162,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &3444216631070097272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5511756981374246323}
+  m_Layer: 0
+  m_Name: Sensors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5511756981374246323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3444216631070097272}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5408048997566168653}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3596930663378375186
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +202,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5433137255827694642}
   - component: {fileID: 3632780058333322794}
-  - component: {fileID: 4901871487156823011}
   - component: {fileID: 8903750484708890428}
   m_Layer: 8
   m_Name: AgentBody
@@ -193,7 +222,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5408048997566168653}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &3632780058333322794
 CircleCollider2D:
@@ -211,18 +240,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &4901871487156823011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3596930663378375186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09475147c7e7a8e4dac26b4981cd8159, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8903750484708890428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +263,9 @@ GameObject:
   - component: {fileID: 5408048997544501986}
   - component: {fileID: 1530774259299284807}
   - component: {fileID: 4434952303858725611}
-  m_Layer: 8
+  - component: {fileID: 2081598702}
+  - component: {fileID: 2081598703}
+  m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,15 +321,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a10258ba3fa2c42be9ada224a7e5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxSpeed: 5
+  m_maxSpeed: 10
   m_initialDirectionAngle: -90
-  m_maxAccelerationForce: 10
+  m_maxAccelerationForce: 20
   m_maxBrakingForce: 50
-  m_maxSteeringForce: 100
+  m_maxSteeringForce: 500
   m_tangentForceSlope: 200
-  m_normalForceSlope: 3
+  m_normalForceSlope: 10
   m_speedForMaxSteeringForce: 5
   m_speedControlRate: 30
+  m_sensorPrefab: {fileID: 5401598140525954394, guid: 111cbfa83f23cb44cb2777b80e0678b2,
+    type: 3}
+  m_sensorsRoot: {fileID: 5511756981374246323}
+--- !u!114 &2081598702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5408048997544501985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a1169d82c63804ca9fc68729bc4604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_weight: 1
+  m_multipliers:
+    maxSpeed: 1
+    maxForce: 1
+    tangentForceSlope: 1
+    normalForceSlope: 1
+  m_sensorRange: 5
+  m_sensorLayer: 10
+--- !u!114 &2081598703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5408048997544501985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6d4c60923c2a8a4da0a3e320c2129c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_weight: 1
+  m_multipliers:
+    maxSpeed: 1
+    maxForce: 1
+    tangentForceSlope: 1
+    normalForceSlope: 1
 --- !u!1 &5408048997566168652
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +380,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5408048997566168653}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -338,8 +398,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2035908811554055545}
   - {fileID: 5433137255827694642}
+  - {fileID: 5511756981374246323}
   m_Father: {fileID: 5408048997544501986}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -354,7 +414,7 @@ GameObject:
   - component: {fileID: 5408048997606753623}
   - component: {fileID: 4054993944167616484}
   - component: {fileID: 2766790048820430703}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -401,78 +461,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fef5be2f67f4a7940ada5484e4c99157, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &8684694226387343028
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2035908811554055545}
-  - component: {fileID: 3706264456715955673}
-  - component: {fileID: 3984604887857573462}
-  - component: {fileID: 5658550264945635746}
-  m_Layer: 8
-  m_Name: PerceptionSensor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2035908811554055545
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8684694226387343028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5408048997566168653}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &3706264456715955673
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8684694226387343028}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 10
---- !u!114 &3984604887857573462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8684694226387343028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09475147c7e7a8e4dac26b4981cd8159, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5658550264945635746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8684694226387343028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f3ed30a7e3968b4cb4b1e6464e498bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

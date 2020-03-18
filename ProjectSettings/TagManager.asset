@@ -13,10 +13,10 @@ TagManager:
   - UI
   - 
   - 
-  - Agent
+  - AgentBody
   - Obstacle
-  - 
-  - 
+  - ObstacleSensor
+  - AgentSensor
   - 
   - 
   - 

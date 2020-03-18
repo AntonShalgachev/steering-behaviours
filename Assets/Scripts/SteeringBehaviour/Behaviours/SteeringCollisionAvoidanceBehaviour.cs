@@ -17,6 +17,8 @@ namespace UnityPrototype
             public Vector2 direction;
         }
 
+        [SerializeField] private float m_visibilityRange = 5.0f;
+        [SerializeField, Layer] private int m_visbilityLayer = -1;
         [SerializeField] private float m_minDistance = 1.0f;
         [SerializeField] private float m_maxDistance = 5.0f;
 
@@ -29,7 +31,7 @@ namespace UnityPrototype
 
         protected override void Initialize()
         {
-            m_sensor = GetComponentInChildren<PerceptionSensor>()?.GetComponent<Sensor>();
+            m_sensor = m_controller.AddSensor(m_visibilityRange, m_visbilityLayer);
         }
 
         protected override Vector2? CalculateForceComponentsInternal()

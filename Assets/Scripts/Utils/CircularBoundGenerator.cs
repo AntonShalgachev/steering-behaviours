@@ -36,7 +36,7 @@ namespace UnityPrototype
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            GizmosHelper.DrawEllipse(transform.position, m_radii);
+            GizmosHelper.DrawEllipse(transform.position, m_radii, 64);
         }
     }
 }
