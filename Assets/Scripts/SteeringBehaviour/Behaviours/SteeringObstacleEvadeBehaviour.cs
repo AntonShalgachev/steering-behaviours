@@ -24,7 +24,7 @@ namespace UnityPrototype
                 meanPos += (Vector2)obstacle.transform.position;
 
             activation = visibleObstaclesCount > 0 ? 1.0f : 0.0f;
-            var force = SteeringBehaviourUtils.Flee(meanPos, this);
+            var force = visibleObstaclesCount > 0 ? SteeringBehaviourUtils.Flee(meanPos, this) : Vector2.zero;
 
             return force;
         }
