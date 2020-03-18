@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityPrototype
 {
-    public class AgentBody : MonoBehaviour
+    public class ParentAgent : MonoBehaviour
     {
         public SteeringBehaviourController agent { get; private set; }
 

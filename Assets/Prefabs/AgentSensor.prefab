@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1703759180535770902}
   - component: {fileID: 6287323531601490671}
   - component: {fileID: 5401598140525954394}
+  - component: {fileID: 6832301280702526207}
   m_Layer: 0
   m_Name: AgentSensor
   m_TagString: Untagged
@@ -58,5 +59,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09475147c7e7a8e4dac26b4981cd8159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6832301280702526207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6597106821257859201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afaf1d014e63ed2458baf12591432bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

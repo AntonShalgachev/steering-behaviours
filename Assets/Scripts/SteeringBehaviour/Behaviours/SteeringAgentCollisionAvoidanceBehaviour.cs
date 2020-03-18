@@ -23,7 +23,7 @@ namespace UnityPrototype
 
             foreach (var collider in m_sensor.touchingObjects)
             {
-                var agent = collider.GetComponent<AgentBody>()?.agent;
+                var agent = collider.GetComponent<ParentAgent>()?.agent;
 
                 if (agent == null)
                     continue;

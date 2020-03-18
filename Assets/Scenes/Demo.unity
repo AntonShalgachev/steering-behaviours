@@ -495,7 +495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_agentPrefab: {fileID: 4434952303858725611, guid: 74f0f767da878194695b49d0c1ec726d,
     type: 3}
-  m_amount: 50
+  m_amount: 100
   m_angleRange: {x: -180, y: 180}
   m_radius: 7
 --- !u!1 &1364300728
