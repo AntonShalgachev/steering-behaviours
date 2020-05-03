@@ -1,1 +1,1 @@
-# steering-behaviours
+# Demo implementation of steering behaviours
